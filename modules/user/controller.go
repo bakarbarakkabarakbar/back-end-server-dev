@@ -34,6 +34,23 @@ func (ctrl Controller) CreateUser(req UserParam) (any, error) {
 	return res, nil
 }
 
+func (ctrl Controller) GetUserById(id uint) (FindUser, error) {
+	var res FindUser
+	var user, err = ctrl.uc.GetUserById(id)
+	if err != nil {
+		return FindUser{}, err
+	}
+
+	res.Data = user
+	res.ResponseMeta = dto.ResponseMeta{
+		Success:      true,
+		MessageTitle: "Success get user",
+		Message:      "Success",
+		ResponseTime: "",
+	}
+	return res, nil
+}
+
 func (ctrl Controller) CreateUser(req UserParam) (any, error) {
 
 	user, err := ctrl.uc.CreateUser(req)
