@@ -23,3 +23,8 @@ func (repo UserRepository) GetByID(id int) []entities.User {
 	// implementasi query get user by id
 	return []entities.User{}
 }
+
+func (repo UserRepo) CreateUser(user *entity.User) (*entity.User, error) {
+	err := repo.db.Model(&entity.User{}).Create(user).Error
+	return user, err
+}
