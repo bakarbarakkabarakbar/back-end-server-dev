@@ -9,6 +9,12 @@ type UserRepository struct {
 	db *gorm.DB
 }
 
+func NewUserRepo(dbCrud *gorm.DB) UserRepo {
+	return UserRepo{
+		db: dbCrud,
+	}
+}
+
 type UserRepositoryInterface interface {
 	GetByID(id int) []entities.User
 }
