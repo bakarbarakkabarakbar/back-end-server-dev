@@ -9,6 +9,7 @@ type ErrorResponse struct {
 func DefaultErrorResponse() ErrorResponse {
 	return DefaultErrorResponseWithMessage("")
 }
+
 func DefaultErrorResponseWithMessage(msg string) ErrorResponse {
 	return ErrorResponse{
 		ResponseMeta: ResponseMeta{
@@ -41,4 +42,8 @@ func DefaultDataInvalidResponse(validationErrors any) ErrorResponse {
 		},
 		Errors: validationErrors,
 	}
+}
+
+func DefaultBadRequestResponse() ErrorResponse {
+	return DefaultErrorResponseWithMessage("Bad request")
 }
