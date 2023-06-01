@@ -38,10 +38,20 @@ func (rh RequestHandler) GetUsedById(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, res)
+}
+
+func (rh RequestHandler) CreateUser(c *gin.Context) {
+	var request = UserParam{}
+	var err = c.Bind(&request)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
+		return
 	}
+	res, err := rh.ctrl.CreateUser(request)
+	if err != nil {
 
-	response := rq.ctrl.GetUserByID(payload)
-
-	fmt.Println(response)
-	return response
+		c.JSON(http.StatusInternalServerError, dto.DefaultErrorResponse())
+		return
+	}
+	c.JSON(http.StatusOK, res)
 }
