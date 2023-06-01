@@ -32,3 +32,13 @@ func DefaultErrorInvalidDataWithMessage(msg string) ErrorResponse {
 		Data: msg,
 	}
 }
+
+func DefaultDataInvalidResponse(validationErrors any) ErrorResponse {
+	return ErrorResponse{
+		ResponseMeta: ResponseMeta{
+			MessageTitle: "Oops, something went wrong.",
+			Message:      "Data invalid.",
+		},
+		Errors: validationErrors,
+	}
+}
