@@ -40,3 +40,12 @@ func (repo UserRepo) GetUsers(user *entity.User) ([]entity.User, error) {
 	return users, nil
 }
 
+func (repo UserRepo) GetUserById(id uint) (entity.User, error) {
+	var user entity.User
+	var err = repo.db.First(&user, "id", id).Error
+	if err != nil {
+		fmt.Println("error GetUsers", err)
+		return user, err
+	}
+	return user, nil
+}
