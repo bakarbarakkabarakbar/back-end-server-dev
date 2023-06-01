@@ -1,7 +1,9 @@
 package user
 
 import (
-	"fmt"
+	"github.com/gin-gonic/gin"
+	"net/http"
+	"strconv"
 
 	"github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
 )
@@ -14,11 +16,28 @@ type RequestHandlerInterface interface {
 	GetUserByID(request dto.Request) dto.Response
 }
 
-func (rq RequestHandler) GetUserByID(request dto.Request) dto.Response {
+func (rh RequestHandler) GetUsedById(c *gin.Context) {
+	var request = UserParam{}
+	var err = c.BindQuery(&request)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
+		return
+	}
 
-	// convert response ke payload, terjadi validasi
-	payload := Payload{
-		ID: 1,
+	var userId uint64
+	userId, err = strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
+		return
+	}
+
+	var res FindUser
+	res, err = rh.ctrl.GetUserById(uint(userId))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, dto.DefaultErrorResponse())
+		return
+	}
+	c.JSON(http.StatusOK, res)
 	}
 
 	response := rq.ctrl.GetUserByID(payload)
