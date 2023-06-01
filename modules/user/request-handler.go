@@ -49,9 +49,7 @@ func (rh RequestHandler) CreateUser(c *gin.Context) {
 	}
 	res, err := rh.ctrl.CreateUser(request)
 	if err != nil {
-
 		c.JSON(http.StatusInternalServerError, dto.DefaultErrorResponse())
 		return
 	}
 	c.JSON(http.StatusOK, res)
-}
