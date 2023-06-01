@@ -38,6 +38,12 @@ func (rh RequestHandler) GetUsedById(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, res)
+	}
+
+	response := rq.ctrl.GetUserByID(payload)
+
+	fmt.Println(response)
+	return response
 }
 
 func (rh RequestHandler) CreateUser(c *gin.Context) {
