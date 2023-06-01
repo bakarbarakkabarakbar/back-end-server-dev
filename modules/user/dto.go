@@ -16,3 +16,8 @@ type SuccessCreate struct {
 	dto.ResponseMeta
 	Data UserParam `json:"data"`
 }
+
+type FindUser struct {
+	dto.ResponseMeta
+	Data entity.User `json:"data"`
+}
