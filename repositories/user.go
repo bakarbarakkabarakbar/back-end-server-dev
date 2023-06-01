@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	"github.com/dibimbing-satkom-indo/onion-architecture-go/entities"
 	"gorm.io/gorm"
 )
@@ -28,3 +29,14 @@ func (repo UserRepo) CreateUser(user *entity.User) (*entity.User, error) {
 	err := repo.db.Model(&entity.User{}).Create(user).Error
 	return user, err
 }
+
+func (repo UserRepo) GetUsers(user *entity.User) ([]entity.User, error) {
+	var users = make([]entity.User, 0)
+	var err = repo.db.Find(&users).Error
+	if err != nil {
+		fmt.Println("error GetUsers")
+		return []entity.User{}, err
+	}
+	return users, nil
+}
+
