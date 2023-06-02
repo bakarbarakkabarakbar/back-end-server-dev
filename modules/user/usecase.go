@@ -5,21 +5,15 @@ import (
 	"github.com/dibimbing-satkom-indo/onion-architecture-go/repositories"
 )
 
-type Usecase struct {
-	userRepo repositories.UserRepositoryInterface
+type UseCase struct {
+	userRepo repositories.UserRepoInterface
 }
 
 type UsecaseInterface interface {
 	GetUserByID(payload Payload) []entities.User
 }
 
-func (uc Usecase) GetUserByID(payload Payload) []entities.User {
-	user := uc.userRepo.GetByID(payload.ID)
-
-	// if len user == 0 return no user
-	if len(user) == 0 {
-		return nil
-	}
-
-	return user
+func (uc UseCase) GetUserById(id uint) (entities.User, error) {
+	var user, err = uc.userRepo.GetUserById(id)
+	return user, err
 }
