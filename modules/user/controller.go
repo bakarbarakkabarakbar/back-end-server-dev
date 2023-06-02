@@ -5,7 +5,7 @@ import (
 )
 
 type Controller struct {
-	uc UseCaseInterface
+	uc UseCase
 }
 
 type ControllerInterface interface {
