@@ -1,7 +1,9 @@
 package user
 
 import (
+	"github.com/dibimbing-satkom-indo/onion-architecture-go/repositories"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 
@@ -10,6 +12,15 @@ import (
 
 type RequestHandler struct {
 	ctrl Controller
+}
+
+func NewRequestHandler(dbCrud *gorm.DB) RequestHandler {
+	return RequestHandler{
+		ctrl: Controller{
+			uc: UseCase{
+				userRepo: repositories.NewUserRepo(dbCrud)},
+		},
+	}
 }
 
 type RequestHandlerInterface interface {
