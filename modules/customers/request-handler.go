@@ -18,7 +18,7 @@ func NewRequestHandler(dbCrud *gorm.DB) RequestHandler {
 	return RequestHandler{
 		ctrl: Controller{
 			uc: UseCase{
-				userRepo: repositories.NewUserRepo(dbCrud)},
+				userRepo: repositories.NewCustomerRepo(dbCrud)},
 		},
 	}
 }

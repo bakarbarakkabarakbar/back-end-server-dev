@@ -7,7 +7,7 @@ import (
 )
 
 type UseCase struct {
-	userRepo repositories.UserRepo
+	userRepo repositories.CustomerRepo
 }
 
 type UseCaseInterface interface {
@@ -16,7 +16,7 @@ type UseCaseInterface interface {
 }
 
 func (uc UseCase) GetUserById(id uint) (entities.User, error) {
-	var user, err = uc.userRepo.GetUserById(id)
+	var user, err = uc.userRepo.GetCustomerById(id)
 	return user, err
 }
 
@@ -31,7 +31,7 @@ func (uc UseCase) CreateUser(user UserParam) (entities.User, error) {
 		UpdatedAt: time.Time{},
 	}
 
-	_, err := uc.userRepo.CreateUser(newUser)
+	_, err := uc.userRepo.CreateCustomer(newUser)
 	if err != nil {
 		return *newUser, err
 	}
