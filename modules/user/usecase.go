@@ -12,7 +12,7 @@ type UseCase struct {
 
 type UseCaseInterface interface {
 	CreateUser(user UserParam) (entities.User, error)
-	GetUserByID(payload Payload) []entities.User
+	GetUserById(id uint) (entities.User, error)
 }
 
 func (uc UseCase) GetUserById(id uint) (entities.User, error) {
