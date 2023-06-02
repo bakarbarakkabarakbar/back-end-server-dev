@@ -24,7 +24,7 @@ type UserRepoInterface interface {
 }
 
 func (repo UserRepo) GetByID(id int) []entities.User {
-	// implementasi query get user by id
+	// implementasi query get customers by id
 	return []entities.User{}
 }
 

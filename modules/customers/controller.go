@@ -1,4 +1,4 @@
-package user
+package customers
 
 import (
 	"github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
@@ -22,7 +22,7 @@ func (ctrl Controller) CreateUser(req UserParam) (any, error) {
 	res := SuccessCreate{
 		ResponseMeta: dto.ResponseMeta{
 			Success:      true,
-			MessageTitle: "Success create user",
+			MessageTitle: "Success create customers",
 			Message:      "Success Register",
 			ResponseTime: "",
 		},
@@ -45,7 +45,7 @@ func (ctrl Controller) GetUserById(id uint) (FindUser, error) {
 	res.Data = user
 	res.ResponseMeta = dto.ResponseMeta{
 		Success:      true,
-		MessageTitle: "Success get user",
+		MessageTitle: "Success get customers",
 		Message:      "Success",
 		ResponseTime: "",
 	}

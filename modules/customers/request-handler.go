@@ -1,4 +1,4 @@
-package user
+package customers
 
 import (
 	"github.com/dibimbing-satkom-indo/onion-architecture-go/repositories"

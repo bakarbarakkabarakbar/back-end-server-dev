@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/modules/user"
+	"github.com/dibimbing-satkom-indo/onion-architecture-go/modules/customers"
 	"github.com/dibimbing-satkom-indo/onion-architecture-go/utils/db"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -34,7 +34,7 @@ func main() {
 
 	fmt.Println("database connected..!")
 
-	var userRouter = user.NewRouter(dbCrud)
+	var userRouter = customers.NewRouter(dbCrud)
 	userRouter.Router(router)
 
 	errRouter := router.Run(":8081")
