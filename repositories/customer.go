@@ -23,19 +23,19 @@ type CustomerRepoInterface interface {
 	CreateCustomer(user *entities.User) (*entities.User, error)
 }
 
-func (repo CustomerRepo) GetByID(id int) []entities.User {
+func (cr CustomerRepo) GetByID(id int) []entities.User {
 	// implementasi query get customers by id
 	return []entities.User{}
 }
 
-func (repo CustomerRepo) CreateCustomer(user *entities.User) (*entities.User, error) {
-	err := repo.db.Model(&entities.User{}).Create(user).Error
+func (cr CustomerRepo) CreateCustomer(user *entities.User) (*entities.User, error) {
+	err := cr.db.Model(&entities.User{}).Create(user).Error
 	return user, err
 }
 
-func (repo CustomerRepo) GetCustomers(user *entities.User) ([]entities.User, error) {
+func (cr CustomerRepo) GetCustomers(user *entities.User) ([]entities.User, error) {
 	var users = make([]entities.User, 0)
-	var err = repo.db.Find(&users).Error
+	var err = cr.db.Find(&users).Error
 	if err != nil {
 		fmt.Println("error GetCustomers")
 		return []entities.User{}, err
@@ -43,9 +43,9 @@ func (repo CustomerRepo) GetCustomers(user *entities.User) ([]entities.User, err
 	return users, nil
 }
 
-func (repo CustomerRepo) GetCustomerById(id uint) (entities.User, error) {
+func (cr CustomerRepo) GetCustomerById(id uint) (entities.User, error) {
 	var user entities.User
-	var err = repo.db.First(&user, "id", id).Error
+	var err = cr.db.First(&user, "id", id).Error
 	if err != nil {
 		fmt.Println("error GetCustomers", err)
 		return user, err
