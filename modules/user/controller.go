@@ -5,11 +5,12 @@ import (
 )
 
 type Controller struct {
-	uc UsecaseInterface
+	uc UseCaseInterface
 }
 
 type ControllerInterface interface {
-	GetUserByID(payload Payload) dto.Response
+	CreateUser(req UserParam) (any, error)
+	GetUserById(id uint) (FindUser, error)
 }
 
 func (ctrl Controller) CreateUser(req UserParam) (any, error) {
