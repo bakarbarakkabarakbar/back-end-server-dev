@@ -16,6 +16,13 @@ func NewAccountRepo(dbCrud *gorm.DB) AdminRepo {
 	}
 }
 
+type AdminRepoInterface interface {
+	GetByID(id int) []entities.User
+	GetCustomers(user *entities.User) ([]entities.User, error)
+	GetCustomerById(id uint) (entities.User, error)
+	CreateCustomer(user *entities.User) (*entities.User, error)
+}
+
 func (ar AdminRepo) CreateCustomer(customer *entities.User) (*entities.User, error) {
 	err := ar.db.Model(&entities.User{}).Create(customer).Error
 	return customer, err
