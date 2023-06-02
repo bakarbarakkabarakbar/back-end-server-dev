@@ -7,9 +7,10 @@ import (
 )
 
 func GormMysql() *gorm.DB {
-	db, err := gorm.Open(mysql.Open("root:1234QWERasdf.@tcp(localhost:3306)/gorm-backend?charset=utf8mb4&parseTime=True&loc=UTC"), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open("golang-service-account:STRONG.password79@tcp(34.224.99.112:3306)/miniproject?charset=utf8mb4&parseTime=True&loc=UTC"), &gorm.Config{})
 	if err != nil {
 		log.Println("gorm.open", err)
+		return nil
 	}
 	return db
 }
