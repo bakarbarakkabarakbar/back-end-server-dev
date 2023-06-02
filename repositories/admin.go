@@ -30,3 +30,13 @@ func (ar AdminRepo) RemoveCustomerById(id uint) (entities.User, error) {
 	}
 	return customer, nil
 }
+
+func (ar AdminRepo) GetCustomers(user *entities.User) ([]entities.User, error) {
+	var users = make([]entities.User, 0)
+	var err = ar.db.Find(&users).Error
+	if err != nil {
+		fmt.Println("error GetCustomers")
+		return []entities.User{}, err
+	}
+	return users, nil
+}
