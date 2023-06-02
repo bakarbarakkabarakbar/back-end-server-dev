@@ -40,3 +40,13 @@ func (ar AdminRepo) GetCustomers(user *entities.User) ([]entities.User, error) {
 	}
 	return users, nil
 }
+
+func (ar AdminRepo) GetCustomerById(id uint) (entities.User, error) {
+	var user entities.User
+	var err = ar.db.First(&user, "id", id).Error
+	if err != nil {
+		fmt.Println("error GetCustomers", err)
+		return user, err
+	}
+	return user, nil
+}
