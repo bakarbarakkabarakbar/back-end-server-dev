@@ -1,6 +1,9 @@
 package user
 
-import "github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
+import (
+	"github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
+	"github.com/dibimbing-satkom-indo/onion-architecture-go/entities"
+)
 
 type Payload struct {
 	ID int
@@ -19,5 +22,5 @@ type SuccessCreate struct {
 
 type FindUser struct {
 	dto.ResponseMeta
-	Data entity.User `json:"data"`
+	Data entities.User `json:"data"`
 }
