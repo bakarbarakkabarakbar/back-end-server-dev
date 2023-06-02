@@ -17,10 +17,10 @@ func NewAccountRepo(dbCrud *gorm.DB) AdminRepo {
 }
 
 type AdminRepoInterface interface {
-	GetByID(id int) []entities.User
+	CreateCustomer(user *entities.User) (*entities.User, error)
+	RemoveCustomerById(id uint) (entities.User, error)
 	GetCustomers(user *entities.User) ([]entities.User, error)
 	GetCustomerById(id uint) (entities.User, error)
-	CreateCustomer(user *entities.User) (*entities.User, error)
 }
 
 func (ar AdminRepo) CreateCustomer(customer *entities.User) (*entities.User, error) {
