@@ -9,7 +9,7 @@ import (
 )
 
 type RequestHandler struct {
-	ctrl ControllerInterface
+	ctrl Controller
 }
 
 type RequestHandlerInterface interface {
