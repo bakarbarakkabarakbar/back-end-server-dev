@@ -22,5 +22,5 @@ type SuccessCreate struct {
 
 type FindUser struct {
 	dto.ResponseMeta
-	Data entities.User `json:"data"`
+	Data entities.Customer `json:"data"`
 }

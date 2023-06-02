@@ -17,19 +17,19 @@ func NewAccountRepo(dbCrud *gorm.DB) AdminRepo {
 }
 
 type AdminRepoInterface interface {
-	GetByID(id int) []entities.User
-	GetCustomers(user *entities.User) ([]entities.User, error)
-	GetCustomerById(id uint) (entities.User, error)
-	CreateCustomer(user *entities.User) (*entities.User, error)
+	GetByID(id int) []entities.Customer
+	GetCustomers(user *entities.Customer) ([]entities.Customer, error)
+	GetCustomerById(id uint) (entities.Customer, error)
+	CreateCustomer(user *entities.Customer) (*entities.Customer, error)
 }
 
-func (ar AdminRepo) CreateCustomer(customer *entities.User) (*entities.User, error) {
-	err := ar.db.Model(&entities.User{}).Create(customer).Error
+func (ar AdminRepo) CreateCustomer(customer *entities.Customer) (*entities.Customer, error) {
+	err := ar.db.Model(&entities.Customer{}).Create(customer).Error
 	return customer, err
 }
 
-func (ar AdminRepo) RemoveCustomerById(id uint) (entities.User, error) {
-	var customer = entities.User{Id: id}
+func (ar AdminRepo) RemoveCustomerById(id uint) (entities.Customer, error) {
+	var customer = entities.Customer{Id: id}
 	var err = ar.db.Delete(&customer).Error
 	if err != nil {
 		fmt.Println("Error RemoveCustomerById", err)
@@ -38,18 +38,18 @@ func (ar AdminRepo) RemoveCustomerById(id uint) (entities.User, error) {
 	return customer, nil
 }
 
-func (ar AdminRepo) GetCustomers(user *entities.User) ([]entities.User, error) {
-	var users = make([]entities.User, 0)
+func (ar AdminRepo) GetCustomers(user *entities.Customer) ([]entities.Customer, error) {
+	var users = make([]entities.Customer, 0)
 	var err = ar.db.Find(&users).Error
 	if err != nil {
 		fmt.Println("error GetCustomers")
-		return []entities.User{}, err
+		return []entities.Customer{}, err
 	}
 	return users, nil
 }
 
-func (ar AdminRepo) GetCustomerById(id uint) (entities.User, error) {
-	var user entities.User
+func (ar AdminRepo) GetCustomerById(id uint) (entities.Customer, error) {
+	var user entities.Customer
 	var err = ar.db.First(&user, "id", id).Error
 	if err != nil {
 		fmt.Println("error GetCustomers", err)

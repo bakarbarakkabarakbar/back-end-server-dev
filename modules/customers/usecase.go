@@ -11,19 +11,19 @@ type UseCase struct {
 }
 
 type UseCaseInterface interface {
-	CreateUser(user UserParam) (entities.User, error)
-	GetUserById(id uint) (entities.User, error)
+	CreateUser(user UserParam) (entities.Customer, error)
+	GetUserById(id uint) (entities.Customer, error)
 }
 
-func (uc UseCase) GetUserById(id uint) (entities.User, error) {
+func (uc UseCase) GetUserById(id uint) (entities.Customer, error) {
 	var user, err = uc.userRepo.GetCustomerById(id)
 	return user, err
 }
 
-func (uc UseCase) CreateUser(user UserParam) (entities.User, error) {
-	var newUser *entities.User
+func (uc UseCase) CreateUser(user UserParam) (entities.Customer, error) {
+	var newUser *entities.Customer
 
-	newUser = &entities.User{
+	newUser = &entities.Customer{
 		Name:      user.Name,
 		Email:     user.Email,
 		Password:  user.Password,

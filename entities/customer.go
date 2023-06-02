@@ -2,7 +2,7 @@ package entities
 
 import "time"
 
-type User struct {
+type Customer struct {
 	Id        uint   `gorm:"primary_key"`
 	Name      string `gorm:"column:name"`
 	Email     string `gorm:"column:email"`
