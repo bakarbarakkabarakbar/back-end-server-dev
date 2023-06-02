@@ -20,6 +20,7 @@ type UserRepoInterface interface {
 	GetByID(id int) []entities.User
 	GetUsers(user *entities.User) ([]entities.User, error)
 	GetUserById(id uint) (entities.User, error)
+	CreateUser(user *entities.User) (*entities.User, error)
 }
 
 func (repo UserRepo) GetByID(id int) []entities.User {
