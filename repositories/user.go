@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserRepository struct {
+type UserRepo struct {
 	db *gorm.DB
 }
 
@@ -16,32 +16,34 @@ func NewUserRepo(dbCrud *gorm.DB) UserRepo {
 	}
 }
 
-type UserRepositoryInterface interface {
+type UserRepoInterface interface {
 	GetByID(id int) []entities.User
+	GetUsers(user *entities.User) ([]entities.User, error)
+	GetUserById(id uint) (entities.User, error)
 }
 
-func (repo UserRepository) GetByID(id int) []entities.User {
+func (repo UserRepo) GetByID(id int) []entities.User {
 	// implementasi query get user by id
 	return []entities.User{}
 }
 
-func (repo UserRepo) CreateUser(user *entity.User) (*entity.User, error) {
-	err := repo.db.Model(&entity.User{}).Create(user).Error
+func (repo UserRepo) CreateUser(user *entities.User) (*entities.User, error) {
+	err := repo.db.Model(&entities.User{}).Create(user).Error
 	return user, err
 }
 
-func (repo UserRepo) GetUsers(user *entity.User) ([]entity.User, error) {
-	var users = make([]entity.User, 0)
+func (repo UserRepo) GetUsers(user *entities.User) ([]entities.User, error) {
+	var users = make([]entities.User, 0)
 	var err = repo.db.Find(&users).Error
 	if err != nil {
 		fmt.Println("error GetUsers")
-		return []entity.User{}, err
+		return []entities.User{}, err
 	}
 	return users, nil
 }
 
-func (repo UserRepo) GetUserById(id uint) (entity.User, error) {
-	var user entity.User
+func (repo UserRepo) GetUserById(id uint) (entities.User, error) {
+	var user entities.User
 	var err = repo.db.First(&user, "id", id).Error
 	if err != nil {
 		fmt.Println("error GetUsers", err)
