@@ -21,13 +21,3 @@ type FindUser struct {
 	dto.ResponseMeta
 	Data entity.User `json:"data"`
 }
-
-type FindUser struct {
-	dto.ResponseMeta
-	Data entity.User `json:"data"`
-}
-
-type SuccessCreate struct {
-	dto.ResponseMeta
-	Data UserParam `json:"data"`
-}
