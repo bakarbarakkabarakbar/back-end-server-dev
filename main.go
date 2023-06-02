@@ -14,6 +14,10 @@ func main() {
 	// open connection db
 	var dbCrud = db.GormMysql()
 
+	if dbCrud == nil {
+		fmt.Println("connection failed to init..!")
+		return
+	}
 	//check connection
 	checkDB, err := dbCrud.DB()
 	if err != nil {
