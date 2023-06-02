@@ -1,24 +1,19 @@
 package user
 
 import (
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 type Router struct {
-	rq RequestHandlerInterface
+	rh RequestHandler
 }
 
 func NewRouter() Router {
 	return Router{}
 }
 
-func (r Router) Route(request dto.Request) {
-
-}
-
-func (ru Router) Router(router *gin.Engine) {
+func (r Router) Router(router *gin.Engine) {
 	var basePath = "/"
 	var basePathGroup = router.Group(basePath)
 	basePathGroup.GET("/ping",
@@ -30,7 +25,7 @@ func (ru Router) Router(router *gin.Engine) {
 
 	var userPath = "/user"
 	var userPathGroup = router.Group(userPath)
-	userPathGroup.POST("/register", ru.rh.CreateUser)
-	userPathGroup.GET("/:id", ru.rh.GetUsedById)
+	userPathGroup.POST("/register", r.rh.CreateUser)
+	userPathGroup.GET("/:id", r.rh.GetUsedById)
 
 }
