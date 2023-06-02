@@ -3,23 +3,37 @@ package user
 import (
 	"github.com/dibimbing-satkom-indo/onion-architecture-go/entities"
 	"github.com/dibimbing-satkom-indo/onion-architecture-go/repositories"
+	"time"
 )
 
-type Usecase struct {
-	userRepo repositories.UserRepositoryInterface
+type UseCase struct {
+	userRepo repositories.UserRepoInterface
 }
 
-type UsecaseInterface interface {
+type UseCaseInterface interface {
+	CreateUser(user UserParam) (entities.User, error)
 	GetUserByID(payload Payload) []entities.User
 }
 
-func (uc Usecase) GetUserByID(payload Payload) []entities.User {
-	user := uc.userRepo.GetByID(payload.ID)
+func (uc UseCase) GetUserById(id uint) (entities.User, error) {
+	var user, err = uc.userRepo.GetUserById(id)
+	return user, err
+}
 
-	// if len user == 0 return no user
-	if len(user) == 0 {
-		return nil
+func (uc UseCase) CreateUser(user UserParam) (entities.User, error) {
+	var newUser *entities.User
+
+	newUser = &entities.User{
+		Name:      user.Name,
+		Email:     user.Email,
+		Password:  user.Password,
+		CreatedAt: time.Time{},
+		UpdatedAt: time.Time{},
 	}
 
-	return user
+	_, err := uc.userRepo.CreateUser(newUser)
+	if err != nil {
+		return *newUser, err
+	}
+	return *newUser, nil
 }
