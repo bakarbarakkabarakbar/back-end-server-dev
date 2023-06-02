@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -9,8 +10,9 @@ type Router struct {
 	rh RequestHandler
 }
 
-func NewRouter() Router {
-	return Router{}
+func NewRouter(dbCrud *gorm.DB) Router {
+	return Router{
+		rh: NewRequestHandler(dbCrud)}
 }
 
 func (r Router) Router(router *gin.Engine) {
