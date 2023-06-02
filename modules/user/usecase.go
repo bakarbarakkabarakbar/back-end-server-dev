@@ -7,7 +7,7 @@ import (
 )
 
 type UseCase struct {
-	userRepo repositories.UserRepoInterface
+	userRepo repositories.UserRepo
 }
 
 type UseCaseInterface interface {
