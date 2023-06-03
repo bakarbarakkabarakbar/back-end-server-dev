@@ -5,49 +5,46 @@ import (
 )
 
 type Controller struct {
-	uc UseCase
+	uc UseCaseInterface
 }
 
 type ControllerInterface interface {
-	CreateUser(req UserParam) (any, error)
-	GetUserById(id uint) (FindUser, error)
+	GetCustomerById(req *CustomerParam) (ResponseParam, error)
+	GetCustomerByEmail(req *CustomerParam) (ResponseParam, error)
 }
 
-func (ctrl Controller) CreateUser(req UserParam) (any, error) {
-
-	user, err := ctrl.uc.CreateUser(req)
+func (ctrl Controller) GetCustomerById(req *CustomerParam) (ResponseParam, error) {
+	var customer, err = ctrl.uc.GetCustomerById(req)
 	if err != nil {
-		return SuccessCreate{}, err
+		return ResponseParam{}, err
 	}
-	res := SuccessCreate{
+
+	var res = ResponseParam{
 		ResponseMeta: dto.ResponseMeta{
 			Success:      true,
-			MessageTitle: "Success create customers",
-			Message:      "Success Register",
+			MessageTitle: "Success GetCustomerById",
+			Message:      "Success",
 			ResponseTime: "",
 		},
-		Data: UserParam{
-			Name:     user.Name,
-			Email:    user.Email,
-			Password: user.Password,
-		},
+		Data: customer,
 	}
 	return res, nil
 }
 
-func (ctrl Controller) GetUserById(id uint) (FindUser, error) {
-	var res FindUser
-	var user, err = ctrl.uc.GetUserById(id)
+func (ctrl Controller) GetCustomerByEmail(req *CustomerParam) (ResponseParam, error) {
+	var customers, err = ctrl.uc.GetCustomerByEmail(req)
 	if err != nil {
-		return FindUser{}, err
+		return ResponseParam{}, err
 	}
 
-	res.Data = user
-	res.ResponseMeta = dto.ResponseMeta{
-		Success:      true,
-		MessageTitle: "Success get customers",
-		Message:      "Success",
-		ResponseTime: "",
+	var res = ResponseParam{
+		ResponseMeta: dto.ResponseMeta{
+			Success:      true,
+			MessageTitle: "Success GetCustomerByEmail",
+			Message:      "Success",
+			ResponseTime: "",
+		},
+		Data: customers,
 	}
 	return res, nil
 }
