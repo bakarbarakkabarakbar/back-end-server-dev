@@ -8,8 +8,8 @@ import (
 )
 
 type UseCase struct {
-	adminRepo    repositories.AdminRepo
-	customerRepo repositories.CustomerRepo
+	adminRepo    repositories.AdminRepoInterface
+	customerRepo repositories.CustomerRepoInterface
 }
 
 type UseCaseInterface interface {
@@ -21,7 +21,7 @@ type UseCaseInterface interface {
 }
 
 func (uc UseCase) GetCustomerById(customer *CustomerParam) (CustomerParam, error) {
-	var result, err = uc.customerRepo.GetCustomerById(customer.Id)
+	var result, err = uc.customerRepo.GetCustomerById(&customer.Id)
 	return CustomerParam{
 		Id:        result.Id,
 		FirstName: result.FirstName,
@@ -74,16 +74,15 @@ func (uc UseCase) CreateCustomer(user *CustomerParam) error {
 	var newUser *entities.Customer
 
 	newUser = &entities.Customer{
-		FirstName: user.FirstName,
-		LastName:  user.LastName,
-		Email:     user.Email,
-		Avatar:    user.Avatar,
-		CreatedAt: time.Time{},
-		UpdatedAt: time.Time{},
+		FirstName:  user.FirstName,
+		LastName:   user.LastName,
+		Email:      user.Email,
+		Avatar:     user.Avatar,
+		CreatedAt:  time.Now(),
+		ModifiedAt: time.Now(),
 	}
 
 	var err = uc.adminRepo.CreateCustomer(newUser)
-
 	return err
 }
 
