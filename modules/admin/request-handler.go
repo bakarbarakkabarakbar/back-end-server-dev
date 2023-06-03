@@ -10,7 +10,7 @@ import (
 )
 
 type RequestHandler struct {
-	ctrl Controller
+	ctrl ControllerInterface
 }
 
 func NewRequestHandler(dbCrud *gorm.DB) RequestHandler {
@@ -42,7 +42,7 @@ func (rh RequestHandler) GetCustomer(c *gin.Context) {
 			}
 			res, err = rh.ctrl.GetCustomerById(&CustomerParam{Id: uint(customerId)})
 			if err != nil {
-				c.JSON(http.StatusInternalServerError, dto.DefaultErrorResponse())
+				c.JSON(http.StatusInternalServerError, dto.DefaultErrorWithResponse(res.ResponseMeta))
 				return
 			}
 			c.JSON(http.StatusOK, res)
@@ -56,7 +56,7 @@ func (rh RequestHandler) GetCustomer(c *gin.Context) {
 
 			res, err = rh.ctrl.GetCustomerByName(&CustomerParam{FirstName: customerName})
 			if err != nil {
-				c.JSON(http.StatusInternalServerError, dto.DefaultErrorResponse())
+				c.JSON(http.StatusInternalServerError, dto.DefaultErrorWithResponse(res.ResponseMeta))
 				return
 			}
 			c.JSON(http.StatusOK, res)
@@ -69,7 +69,7 @@ func (rh RequestHandler) GetCustomer(c *gin.Context) {
 			var customerEmail = value[0]
 			res, err = rh.ctrl.GetCustomersByEmail(&CustomerParam{Email: customerEmail})
 			if err != nil {
-				c.JSON(http.StatusInternalServerError, dto.DefaultErrorResponse())
+				c.JSON(http.StatusInternalServerError, dto.DefaultErrorWithResponse(res.ResponseMeta))
 				return
 			}
 			c.JSON(http.StatusOK, res)
@@ -95,16 +95,26 @@ func (rh RequestHandler) CreateCustomer(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-func (rh RequestHandler) RemoveCustomerById(c *gin.Context) {
+func (rh RequestHandler) ModifyCustomer(c *gin.Context) {
 	var request = CustomerParam{}
-	var err = c.BindQuery(&request)
+	var err = c.Bind(&request)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
 		return
 	}
+	var res ResponseParam
+	res, err = rh.ctrl.ModifyCustomer(&request)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, dto.DefaultErrorWithResponse(res.ResponseMeta))
+		return
+	}
+	c.JSON(http.StatusOK, res)
+}
 
+func (rh RequestHandler) RemoveCustomer(c *gin.Context) {
+	var err error
 	var customerId uint64
-	customerId, err = strconv.ParseUint(c.Param("id"), 10, 64)
+	customerId, err = strconv.ParseUint(c.Query("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
 		return
@@ -113,7 +123,85 @@ func (rh RequestHandler) RemoveCustomerById(c *gin.Context) {
 	var res ResponseParam
 	res, err = rh.ctrl.RemoveCustomerById(&CustomerParam{Id: uint(customerId)})
 	if err != nil {
+		c.JSON(http.StatusInternalServerError, dto.DefaultErrorWithResponse(res.ResponseMeta))
+		return
+	}
+	c.JSON(http.StatusOK, res)
+}
+
+func (rh RequestHandler) GetAdmin(c *gin.Context) {
+	var res ResponseParam
+	var err error
+	var queryParam map[string][]string
+
+	queryParam = c.Request.URL.Query()
+
+	for key, value := range queryParam {
+		switch key {
+		case "id":
+			var adminId uint64
+			adminId, err = strconv.ParseUint(value[0], 10, 64)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
+				return
+			}
+			res, err = rh.ctrl.GetAdminById(&ActorParam{Id: uint(adminId)})
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, dto.DefaultErrorWithResponse(res.ResponseMeta))
+				return
+			}
+			c.JSON(http.StatusOK, res)
+			return
+		}
+	}
+}
+
+func (rh RequestHandler) CreateAdmin(c *gin.Context) {
+
+	var request = ActorParamWithPassword{}
+	var err = c.Bind(&request)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
+		return
+	}
+	var res ResponseParam
+	res, err = rh.ctrl.CreateAdmin(&request)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, dto.DefaultErrorResponse())
+		return
+	}
+	c.JSON(http.StatusOK, res)
+}
+
+func (rh RequestHandler) ModifyAdmin(c *gin.Context) {
+	var request = ActorParamWithPassword{}
+	var err = c.Bind(&request)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
+		return
+	}
+	var res ResponseParam
+	res, err = rh.ctrl.ModifyAdmin(&request)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, dto.DefaultErrorWithResponse(res.ResponseMeta))
+		return
+	}
+	c.JSON(http.StatusOK, res)
+}
+
+func (rh RequestHandler) RemoveAdmin(c *gin.Context) {
+	var err error
+	var adminId uint64
+	adminId, err = strconv.ParseUint(c.Query("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
+		return
+	}
+
+	var res ResponseParam
+	res, err = rh.ctrl.RemoveAdminById(&ActorParam{Id: uint(adminId)})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, dto.DefaultErrorWithResponse(res.ResponseMeta))
 		return
 	}
 	c.JSON(http.StatusOK, res)
