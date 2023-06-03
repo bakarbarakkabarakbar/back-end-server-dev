@@ -10,9 +10,21 @@ type CustomerParam struct {
 	Avatar    string `json:"avatar"`
 }
 
+type ActorParamWithPassword struct {
+	Id         uint   `json:"id"`
+	Username   string `json:"username"`
+	Password   string `json:"password"`
+	RoleId     uint   `json:"role_id"`
+	IsVerified string `json:"is_verified"`
+	IsActive   string `json:"is_active"`
+}
+
 type ActorParam struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Id         uint   `json:"id"`
+	Username   string `json:"username"`
+	RoleId     uint   `json:"role_id"`
+	IsVerified string `json:"is_verified"`
+	IsActive   string `json:"is_active"`
 }
 
 type ResponseParam struct {
