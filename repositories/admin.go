@@ -10,7 +10,7 @@ type AdminRepo struct {
 	db *gorm.DB
 }
 
-func NewAccountRepo(dbCrud *gorm.DB) AdminRepo {
+func NewAdminRepo(dbCrud *gorm.DB) AdminRepo {
 	return AdminRepo{
 		db: dbCrud,
 	}
@@ -25,7 +25,9 @@ type AdminRepoInterface interface {
 
 func (ar AdminRepo) GetCustomersByName(name *string) ([]entities.Customer, error) {
 	var customers = make([]entities.Customer, 0)
-	var err = ar.db.Where("Name LIKE ?", "%"+*name+"%").Find(&customers).Error
+	var err = ar.db.Raw(
+		"SELECT * FROM customers WHERE CONCAT(first_name, ' ', last_name) LIKE %", name, "%").Scan(&customers).Error
+	//var err = ar.db.Where("Name LIKE ?", "%"+*name+"%").Find(&customers).Error
 	if err != nil {
 		fmt.Println("error GetCustomersByName", err)
 		return nil, err
@@ -44,6 +46,7 @@ func (ar AdminRepo) GetCustomersByEmail(email *string) ([]entities.Customer, err
 }
 
 func (ar AdminRepo) CreateCustomer(customer *entities.Customer) error {
+	fmt.Println(customer)
 	err := ar.db.Model(&entities.Customer{}).Create(customer).Error
 	return err
 }
