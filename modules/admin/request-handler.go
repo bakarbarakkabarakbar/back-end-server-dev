@@ -17,89 +17,66 @@ func NewRequestHandler(dbCrud *gorm.DB) RequestHandler {
 	return RequestHandler{
 		ctrl: Controller{
 			uc: UseCase{
-				customerRepo: repositories.NewCustomerRepo(dbCrud)},
+				adminRepo:    repositories.NewAdminRepo(dbCrud),
+				customerRepo: repositories.NewCustomerRepo(dbCrud),
+			},
 		},
 	}
 }
 
-func (rh RequestHandler) GetCustomerById(c *gin.Context) {
-	var request = CustomerParam{}
-	var err = c.BindQuery(&request)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
-		return
-	}
-
-	var customerId uint64
-	customerId, err = strconv.ParseUint(c.Param("id"), 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
-		return
-	}
-
+func (rh RequestHandler) GetCustomer(c *gin.Context) {
 	var res ResponseParam
-	res, err = rh.ctrl.GetCustomerById(&CustomerParam{Id: uint(customerId)})
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, dto.DefaultErrorResponse())
-		return
-	}
-	c.JSON(http.StatusOK, res)
-}
+	var err error
+	var queryParam map[string][]string
 
-func (rh RequestHandler) GetCustomerByName(c *gin.Context) {
-	var request = CustomerParam{}
-	var err = c.BindQuery(&request)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
-		return
-	}
+	queryParam = c.Request.URL.Query()
 
-	var customerFirstName string
-	customerFirstName = c.Param("first_name")
-	if customerFirstName == "" {
-		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
-		return
-	}
-	var customerLastName string
-	customerLastName = c.Param("last_name")
-	if customerLastName == "" {
-		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
-		return
-	}
+	for key, value := range queryParam {
+		switch key {
+		case "id":
+			var customerId uint64
+			customerId, err = strconv.ParseUint(value[0], 10, 64)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
+				return
+			}
+			res, err = rh.ctrl.GetCustomerById(&CustomerParam{Id: uint(customerId)})
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, dto.DefaultErrorResponse())
+				return
+			}
+			c.JSON(http.StatusOK, res)
+			return
+		case "name":
+			if value[0] == "" {
+				c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
+				return
+			}
+			var customerName = value[0]
 
-	var res ResponseParam
-	res, err = rh.ctrl.GetCustomerByName(&CustomerParam{
-		FirstName: customerFirstName,
-		LastName:  customerLastName})
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, dto.DefaultErrorResponse())
-		return
+			res, err = rh.ctrl.GetCustomerByName(&CustomerParam{FirstName: customerName})
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, dto.DefaultErrorResponse())
+				return
+			}
+			c.JSON(http.StatusOK, res)
+			return
+		case "email":
+			if value[0] == "" {
+				c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
+				return
+			}
+			var customerEmail = value[0]
+			res, err = rh.ctrl.GetCustomersByEmail(&CustomerParam{Email: customerEmail})
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, dto.DefaultErrorResponse())
+				return
+			}
+			c.JSON(http.StatusOK, res)
+			return
+		}
 	}
-	c.JSON(http.StatusOK, res)
-}
-
-func (rh RequestHandler) GetCustomerByEmail(c *gin.Context) {
-	var request = CustomerParam{}
-	var err = c.BindQuery(&request)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
-		return
-	}
-
-	var customerEmail string
-	customerEmail = c.Param("email")
-	if customerEmail == "" {
-		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
-		return
-	}
-
-	var res ResponseParam
-	res, err = rh.ctrl.GetCustomersByEmail(&CustomerParam{Email: customerEmail})
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, dto.DefaultErrorResponse())
-		return
-	}
-	c.JSON(http.StatusOK, res)
+	c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
 }
 
 func (rh RequestHandler) CreateCustomer(c *gin.Context) {
