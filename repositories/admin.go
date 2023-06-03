@@ -17,43 +17,49 @@ func NewAccountRepo(dbCrud *gorm.DB) AdminRepo {
 }
 
 type AdminRepoInterface interface {
-	CreateCustomer(user *entities.User) (*entities.User, error)
-	RemoveCustomerById(id uint) (entities.User, error)
-	GetCustomers(user *entities.User) ([]entities.User, error)
-	GetCustomerById(id uint) (entities.User, error)
+	GetCustomersByName(name *string) ([]entities.Customer, error)
+	GetCustomersByEmail(email *string) ([]entities.Customer, error)
+	CreateCustomer(customer *entities.Customer) error
+	RemoveCustomerById(id *uint) (*entities.Customer, error)
 }
 
-func (ar AdminRepo) CreateCustomer(customer *entities.Customer) (*entities.Customer, error) {
-	err := ar.db.Model(&entities.Customer{}).Create(customer).Error
-	return customer, err
-}
-
-func (ar AdminRepo) RemoveCustomerById(id uint) (entities.Customer, error) {
-	var customer = entities.Customer{Id: id}
-	var err = ar.db.Delete(&customer).Error
+func (ar AdminRepo) GetCustomersByName(name *string) ([]entities.Customer, error) {
+	var customers = make([]entities.Customer, 0)
+	var err = ar.db.Where("Name LIKE ?", "%"+*name+"%").Find(&customers).Error
 	if err != nil {
+		fmt.Println("error GetCustomersByName", err)
+		return nil, err
+	}
+	return customers, nil
+}
+
+func (ar AdminRepo) GetCustomersByEmail(email *string) ([]entities.Customer, error) {
+	var customers = make([]entities.Customer, 0)
+	var err = ar.db.Where(&entities.Customer{Email: *email}).Find(&customers).Error
+	if err != nil {
+		fmt.Println("error GetCustomersByEmail", err)
+		return nil, err
+	}
+	return customers, nil
+}
+
+func (ar AdminRepo) CreateCustomer(customer *entities.Customer) error {
+	err := ar.db.Model(&entities.Customer{}).Create(customer).Error
+	return err
+}
+
+func (ar AdminRepo) RemoveCustomerById(id *uint) (*entities.Customer, error) {
+	var customer *entities.Customer
+
+	if err := ar.db.First(customer, "id", *id).Error; err != nil {
+		fmt.Println("Error RemoveCustomerById: Customer Not Found", err)
+		return customer, err
+	}
+
+	if err := ar.db.Delete(customer).Error; err != nil {
 		fmt.Println("Error RemoveCustomerById", err)
 		return customer, err
 	}
+
 	return customer, nil
-}
-
-func (ar AdminRepo) GetCustomers(user *entities.User) ([]entities.User, error) {
-	var users = make([]entities.User, 0)
-	var err = ar.db.Find(&users).Error
-	if err != nil {
-		fmt.Println("error GetCustomers")
-		return []entities.User{}, err
-	}
-	return users, nil
-}
-
-func (ar AdminRepo) GetCustomerById(id uint) (entities.User, error) {
-	var user entities.User
-	var err = ar.db.First(&user, "id", id).Error
-	if err != nil {
-		fmt.Println("error GetCustomers", err)
-		return user, err
-	}
-	return user, nil
 }
