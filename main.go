@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/modules/customers"
+	"github.com/dibimbing-satkom-indo/onion-architecture-go/modules/router"
 	"github.com/dibimbing-satkom-indo/onion-architecture-go/utils/db"
 	"github.com/gin-gonic/gin"
 	"log"
 )
 
 func main() {
-	var router = gin.New()
+	var engine = gin.New()
 
 	// open connection db
 	var dbCrud = db.GormMysql()
@@ -34,10 +34,10 @@ func main() {
 
 	fmt.Println("database connected..!")
 
-	var userRouter = customers.NewRouter(dbCrud)
-	userRouter.Router(router)
+	var route = router.NewRouter(dbCrud)
+	route.Router(engine)
 
-	errRouter := router.Run(":8081")
+	errRouter := engine.Run(":8081")
 	if errRouter != nil {
 		fmt.Println("error running server", errRouter)
 		return
