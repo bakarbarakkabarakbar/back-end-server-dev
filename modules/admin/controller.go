@@ -3,7 +3,7 @@ package admin
 import "github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
 
 type Controller struct {
-	uc UseCase
+	uc UseCaseInterface
 }
 
 type ControllerInterface interface {
