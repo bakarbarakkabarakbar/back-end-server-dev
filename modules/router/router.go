@@ -34,8 +34,16 @@ func (r Router) Router(router *gin.Engine) {
 	userPathGroup.GET("/profile", r.customerReqHandler.GetCustomer)
 
 	var adminPath = "/admin"
-	var adminPathGroup = router.Group(adminPath)
+	var adminPathGroup = router.Group(adminPath, gin.BasicAuth(gin.Accounts{
+		"admin": "admin",
+	}))
+	adminPathGroup.POST("/", r.adminReqHandler.CreateAdmin)
+	adminPathGroup.GET("/", r.adminReqHandler.GetAdmin)
+	adminPathGroup.PUT("/", r.adminReqHandler.ModifyAdmin)
+	adminPathGroup.DELETE("/", r.adminReqHandler.RemoveAdmin)
+
 	adminPathGroup.POST("/customer", r.adminReqHandler.CreateCustomer)
 	adminPathGroup.GET("/customer", r.adminReqHandler.GetCustomer)
-
+	adminPathGroup.PUT("/customer", r.adminReqHandler.ModifyCustomer)
+	adminPathGroup.DELETE("/customer", r.adminReqHandler.RemoveCustomer)
 }
