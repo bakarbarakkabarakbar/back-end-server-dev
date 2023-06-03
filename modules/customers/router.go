@@ -7,7 +7,7 @@ import (
 )
 
 type Router struct {
-	rh RequestHandler
+	rh RequestHandlerInterface
 }
 
 func NewRouter(dbCrud *gorm.DB) Router {
@@ -27,7 +27,6 @@ func (r Router) Router(router *gin.Engine) {
 
 	var userPath = "/customers"
 	var userPathGroup = router.Group(userPath)
-	userPathGroup.POST("/register", r.rh.CreateUser)
-	userPathGroup.GET("/:id", r.rh.GetUsedById)
+	userPathGroup.GET("/", r.rh.GetCustomer)
 
 }
