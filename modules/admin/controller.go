@@ -11,13 +11,27 @@ type ControllerInterface interface {
 	GetCustomerByName(req *CustomerParam) (ResponseParam, error)
 	GetCustomersByEmail(req *CustomerParam) (ResponseParam, error)
 	CreateCustomer(req *CustomerParam) (ResponseParam, error)
+	ModifyCustomer(req *CustomerParam) (ResponseParam, error)
 	RemoveCustomerById(req *CustomerParam) (ResponseParam, error)
+
+	GetAdminById(req *ActorParam) (ResponseParam, error)
+	CreateAdmin(req *ActorParamWithPassword) (ResponseParam, error)
+	ModifyAdmin(req *ActorParamWithPassword) (ResponseParam, error)
+	RemoveAdminById(req *ActorParam) (ResponseParam, error)
 }
 
 func (ctrl Controller) GetCustomerById(req *CustomerParam) (ResponseParam, error) {
 	var customer, err = ctrl.uc.GetCustomerById(req)
 	if err != nil {
-		return ResponseParam{}, err
+		return ResponseParam{
+			ResponseMeta: dto.ResponseMeta{
+				Success:      false,
+				MessageTitle: "Failed GetCustomerById",
+				Message:      err.Error(),
+				ResponseTime: "",
+			},
+			Data: nil,
+		}, err
 	}
 
 	var res = ResponseParam{
@@ -35,7 +49,15 @@ func (ctrl Controller) GetCustomerById(req *CustomerParam) (ResponseParam, error
 func (ctrl Controller) GetCustomerByName(req *CustomerParam) (ResponseParam, error) {
 	var customers, err = ctrl.uc.GetCustomersByName(req)
 	if err != nil {
-		return ResponseParam{}, err
+		return ResponseParam{
+			ResponseMeta: dto.ResponseMeta{
+				Success:      false,
+				MessageTitle: "Failed GetCustomerByName",
+				Message:      err.Error(),
+				ResponseTime: "",
+			},
+			Data: nil,
+		}, err
 	}
 
 	var res = ResponseParam{
@@ -53,7 +75,15 @@ func (ctrl Controller) GetCustomerByName(req *CustomerParam) (ResponseParam, err
 func (ctrl Controller) GetCustomersByEmail(req *CustomerParam) (ResponseParam, error) {
 	var customers, err = ctrl.uc.GetCustomersByEmail(req)
 	if err != nil {
-		return ResponseParam{}, err
+		return ResponseParam{
+			ResponseMeta: dto.ResponseMeta{
+				Success:      false,
+				MessageTitle: "Failed GetCustomersByEmail",
+				Message:      err.Error(),
+				ResponseTime: "",
+			},
+			Data: nil,
+		}, err
 	}
 
 	var res = ResponseParam{
@@ -69,7 +99,6 @@ func (ctrl Controller) GetCustomersByEmail(req *CustomerParam) (ResponseParam, e
 }
 
 func (ctrl Controller) CreateCustomer(req *CustomerParam) (ResponseParam, error) {
-
 	var err = ctrl.uc.CreateCustomer(req)
 	if err != nil {
 		return ResponseParam{ResponseMeta: dto.ResponseMeta{
@@ -98,12 +127,83 @@ func (ctrl Controller) CreateCustomer(req *CustomerParam) (ResponseParam, error)
 	return res, nil
 }
 
+func (ctrl Controller) ModifyCustomer(req *CustomerParam) (ResponseParam, error) {
+	var err = ctrl.uc.ModifyCustomer(req)
+	if err != nil {
+		return ResponseParam{ResponseMeta: dto.ResponseMeta{
+			Success:      false,
+			MessageTitle: "Failed ModifyCustomer",
+			Message:      err.Error(),
+			ResponseTime: "",
+		}}, err
+	}
+
+	var res = ResponseParam{
+		ResponseMeta: dto.ResponseMeta{
+			Success:      true,
+			MessageTitle: "Success ModifyCustomer",
+			Message:      "Success",
+			ResponseTime: "",
+		},
+	}
+	return res, nil
+}
+
 func (ctrl Controller) RemoveCustomerById(req *CustomerParam) (ResponseParam, error) {
 	var customer, err = ctrl.uc.RemoveCustomerById(req)
 	if err != nil {
 		return ResponseParam{ResponseMeta: dto.ResponseMeta{
 			Success:      false,
-			MessageTitle: "Failed RemoveCustomerById",
+			MessageTitle: "Failed RemoveCustomer",
+			Message:      err.Error(),
+			ResponseTime: "",
+		}}, err
+	}
+
+	var res = ResponseParam{
+		ResponseMeta: dto.ResponseMeta{
+			Success:      true,
+			MessageTitle: "Success RemoveCustomer",
+			Message:      "Success",
+			ResponseTime: "",
+		},
+		Data: customer,
+	}
+	return res, nil
+}
+
+func (ctrl Controller) GetAdminById(req *ActorParam) (ResponseParam, error) {
+	var admin, err = ctrl.uc.GetAdminById(req)
+	if err != nil {
+		return ResponseParam{
+			ResponseMeta: dto.ResponseMeta{
+				Success:      false,
+				MessageTitle: "Failed GetAdminById",
+				Message:      err.Error(),
+				ResponseTime: "",
+			},
+			Data: nil,
+		}, err
+	}
+
+	var res = ResponseParam{
+		ResponseMeta: dto.ResponseMeta{
+			Success:      true,
+			MessageTitle: "Success GetAdminById",
+			Message:      "Success",
+			ResponseTime: "",
+		},
+		Data: admin,
+	}
+	return res, nil
+}
+
+func (ctrl Controller) CreateAdmin(req *ActorParamWithPassword) (ResponseParam, error) {
+	var err = ctrl.uc.CreateAdmin(req)
+	if err != nil {
+		return ResponseParam{ResponseMeta: dto.ResponseMeta{
+			Success:      false,
+			MessageTitle: "Failed CreateAdmin",
 			Message:      "Failed",
 			ResponseTime: "",
 		}}, err
@@ -112,11 +212,67 @@ func (ctrl Controller) RemoveCustomerById(req *CustomerParam) (ResponseParam, er
 	var res = ResponseParam{
 		ResponseMeta: dto.ResponseMeta{
 			Success:      true,
-			MessageTitle: "Success RemoveCustomerById",
+			MessageTitle: "Success CreateAdmin",
 			Message:      "Success",
 			ResponseTime: "",
 		},
-		Data: customer,
+		Data: ActorParam{
+			Username:   req.Username,
+			RoleId:     req.Id,
+			IsVerified: "false",
+			IsActive:   "false",
+		},
+	}
+	return res, nil
+}
+
+func (ctrl Controller) ModifyAdmin(req *ActorParamWithPassword) (ResponseParam, error) {
+	var err = ctrl.uc.ModifyAdmin(req)
+	if err != nil {
+		return ResponseParam{ResponseMeta: dto.ResponseMeta{
+			Success:      false,
+			MessageTitle: "Failed ModifyAdmin",
+			Message:      err.Error(),
+			ResponseTime: "",
+		}}, err
+	}
+
+	var res = ResponseParam{
+		ResponseMeta: dto.ResponseMeta{
+			Success:      true,
+			MessageTitle: "Success ModifyAdmin",
+			Message:      "Success",
+			ResponseTime: "",
+		},
+	}
+	return res, nil
+}
+
+func (ctrl Controller) RemoveAdminById(req *ActorParam) (ResponseParam, error) {
+	var admin, err = ctrl.uc.RemoveAdminById(req)
+	if err != nil {
+		return ResponseParam{ResponseMeta: dto.ResponseMeta{
+			Success:      false,
+			MessageTitle: "Failed RemoveAdminById",
+			Message:      err.Error(),
+			ResponseTime: "",
+		}}, err
+	}
+
+	var res = ResponseParam{
+		ResponseMeta: dto.ResponseMeta{
+			Success:      true,
+			MessageTitle: "Success RemoveAdminById",
+			Message:      "Success",
+			ResponseTime: "",
+		},
+		Data: ActorParam{
+			Id:         req.Id,
+			Username:   admin.Username,
+			RoleId:     admin.RoleId,
+			IsVerified: admin.IsVerified,
+			IsActive:   admin.IsActive,
+		},
 	}
 	return res, nil
 }
