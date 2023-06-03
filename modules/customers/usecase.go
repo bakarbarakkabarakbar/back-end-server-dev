@@ -1,39 +1,36 @@
 package customers
 
 import (
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/entities"
 	"github.com/dibimbing-satkom-indo/onion-architecture-go/repositories"
-	"time"
 )
 
 type UseCase struct {
-	userRepo repositories.CustomerRepo
+	customerRepo repositories.CustomerRepoInterface
 }
 
 type UseCaseInterface interface {
-	CreateUser(user UserParam) (entities.Customer, error)
-	GetUserById(id uint) (entities.Customer, error)
+	GetCustomerById(customer *CustomerParam) (CustomerParam, error)
+	GetCustomerByEmail(customer *CustomerParam) (CustomerParam, error)
 }
 
-func (uc UseCase) GetUserById(id uint) (entities.Customer, error) {
-	var user, err = uc.userRepo.GetCustomerById(id)
-	return user, err
+func (uc UseCase) GetCustomerById(customer *CustomerParam) (CustomerParam, error) {
+	var result, err = uc.customerRepo.GetCustomerById(&customer.Id)
+	return CustomerParam{
+		Id:        result.Id,
+		FirstName: result.FirstName,
+		LastName:  result.LastName,
+		Email:     result.Email,
+		Avatar:    result.Avatar,
+	}, err
 }
 
-func (uc UseCase) CreateUser(user UserParam) (entities.Customer, error) {
-	var newUser *entities.Customer
-
-	newUser = &entities.Customer{
-		Name:      user.Name,
-		Email:     user.Email,
-		Password:  user.Password,
-		CreatedAt: time.Time{},
-		UpdatedAt: time.Time{},
-	}
-
-	_, err := uc.userRepo.CreateCustomer(newUser)
-	if err != nil {
-		return *newUser, err
-	}
-	return *newUser, nil
+func (uc UseCase) GetCustomerByEmail(customer *CustomerParam) (CustomerParam, error) {
+	var result, err = uc.customerRepo.GetCustomerByEmail(&customer.Email)
+	return CustomerParam{
+		Id:        result.Id,
+		FirstName: result.FirstName,
+		LastName:  result.LastName,
+		Email:     result.Email,
+		Avatar:    result.Avatar,
+	}, err
 }
