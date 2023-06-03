@@ -4,9 +4,10 @@ import "time"
 
 type Customer struct {
 	Id        uint   `gorm:"primary_key"`
-	Name      string `gorm:"column:name"`
+	FirstName string `gorm:"column:first_name"`
+	LastName  string `gorm:"column:last_name"`
 	Email     string `gorm:"column:email"`
-	Password  string `gorm:"column:password"`
+	Avatar    string `gorm:"column:avatar"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
