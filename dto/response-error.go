@@ -22,6 +22,13 @@ func DefaultErrorResponseWithMessage(msg string) ErrorResponse {
 	}
 }
 
+func DefaultErrorWithResponse(response ResponseMeta) ErrorResponse {
+	return ErrorResponse{
+		ResponseMeta: response,
+		Data:         nil,
+	}
+}
+
 func DefaultErrorInvalidDataWithMessage(msg string) ErrorResponse {
 	return ErrorResponse{
 		ResponseMeta: ResponseMeta{
