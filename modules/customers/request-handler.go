@@ -32,9 +32,9 @@ func (rh RequestHandler) GetCustomer(c *gin.Context) {
 	var res ResponseParam
 	var err error
 	var customerEmail string
-	customerId, err = strconv.ParseUint(c.Param("id"), 10, 64)
+	customerId, err = strconv.ParseUint(c.Query("id"), 10, 64)
 	if err != nil {
-		customerEmail = c.Param("email")
+		customerEmail = c.Query("email")
 		if customerEmail == "" {
 			c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
 			return
