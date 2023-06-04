@@ -171,10 +171,12 @@ func (uc UseCase) ModifyAdmin(admin *ActorParamWithPassword) error {
 	if err != nil {
 		return err
 	}
+	var hash = sha1.New()
+	hash.Write([]byte(admin.Password))
 
 	newAdmin = &entities.Actor{
 		Id:         admin.Id,
-		Username:   admin.Username,
+		Username:   fmt.Sprintf("%x", hash.Sum(nil)),
 		Password:   admin.Password,
 		RoleId:     admin.RoleId,
 		IsVerified: result.IsVerified,
