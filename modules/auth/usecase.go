@@ -15,5 +15,6 @@ func (uc UseCase) GetCredentialByUsername(account *CredentialParam) (CredentialP
 	return CredentialParam{
 		username: result.Username,
 		password: result.Password,
+		roleId:   result.RoleId,
 	}, err
 }
