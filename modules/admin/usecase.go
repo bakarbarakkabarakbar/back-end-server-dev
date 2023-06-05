@@ -18,11 +18,14 @@ type UseCaseInterface interface {
 	GetCustomerById(customer *CustomerParam) (CustomerParam, error)
 	GetCustomersByName(customer *CustomerParam) ([]CustomerParam, error)
 	GetCustomersByEmail(customer *CustomerParam) ([]CustomerParam, error)
+	GetAllCustomers(page *uint) ([]CustomerParam, error)
 	CreateCustomer(customer *CustomerParam) error
 	ModifyCustomer(customer *CustomerParam) error
 	RemoveCustomerById(customer *CustomerParam) (CustomerParam, error)
 
 	GetAdminById(admin *ActorParam) (ActorParam, error)
+	GetAdminsByUsername(admin *ActorParam) ([]ActorParam, error)
+	GetAllAdmins(page *uint) ([]ActorParam, error)
 	CreateAdmin(admin *ActorParamWithPassword) error
 	ModifyAdmin(admin *ActorParamWithPassword) error
 }
@@ -68,6 +71,28 @@ func (uc UseCase) GetCustomersByEmail(customer *CustomerParam) ([]CustomerParam,
 	}
 	if len(results) == 0 {
 		return nil, errors.New("no match found")
+	}
+
+	for _, result := range results {
+		customers = append(customers, CustomerParam{
+			Id:        result.Id,
+			FirstName: result.FirstName,
+			LastName:  result.LastName,
+			Email:     result.Email,
+			Avatar:    result.Avatar,
+		})
+	}
+	return customers, nil
+}
+
+func (uc UseCase) GetAllCustomers(page *uint) ([]CustomerParam, error) {
+	var customers = make([]CustomerParam, 0)
+	var results, err = uc.adminRepo.GetAllCustomers(page)
+	if err != nil {
+		return nil, err
+	}
+	if len(results) == 0 {
+		return nil, errors.New("no entry found")
 	}
 
 	for _, result := range results {
@@ -151,6 +176,50 @@ func (uc UseCase) GetAdminById(admin *ActorParam) (ActorParam, error) {
 		IsVerified: result.IsVerified,
 		IsActive:   result.IsActive,
 	}, err
+}
+
+func (uc UseCase) GetAdminsByUsername(admin *ActorParam) ([]ActorParam, error) {
+	var actors = make([]ActorParam, 0)
+	var results, err = uc.adminRepo.GetAdminsByUsername(&admin.Username)
+	if err != nil {
+		return nil, err
+	}
+	if len(results) == 0 {
+		return nil, errors.New("no entry found")
+	}
+
+	for _, result := range results {
+		actors = append(actors, ActorParam{
+			Id:         result.Id,
+			Username:   result.Username,
+			RoleId:     result.RoleId,
+			IsVerified: result.IsVerified,
+			IsActive:   result.IsActive,
+		})
+	}
+	return actors, nil
+}
+
+func (uc UseCase) GetAllAdmins(page *uint) ([]ActorParam, error) {
+	var actors = make([]ActorParam, 0)
+	var results, err = uc.adminRepo.GetAllAdmins(page)
+	if err != nil {
+		return nil, err
+	}
+	if len(results) == 0 {
+		return nil, errors.New("no entry found")
+	}
+
+	for _, result := range results {
+		actors = append(actors, ActorParam{
+			Id:         result.Id,
+			Username:   result.Username,
+			RoleId:     result.RoleId,
+			IsVerified: result.IsVerified,
+			IsActive:   result.IsActive,
+		})
+	}
+	return actors, nil
 }
 
 func (uc UseCase) CreateAdmin(admin *ActorParamWithPassword) error {
