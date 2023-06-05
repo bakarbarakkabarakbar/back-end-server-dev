@@ -15,11 +15,13 @@ type RequestHandler struct {
 
 type RequestHandlerInterface interface {
 	GetCustomers(c *gin.Context)
+	GetAllCustomers(c *gin.Context)
 	CreateCustomer(c *gin.Context)
 	ModifyCustomer(c *gin.Context)
 	RemoveCustomer(c *gin.Context)
 
 	GetAdmin(c *gin.Context)
+	GetAllAdmins(c *gin.Context)
 	CreateAdmin(c *gin.Context)
 	ModifyAdmin(c *gin.Context)
 }
@@ -90,6 +92,35 @@ func (rh RequestHandler) GetCustomers(c *gin.Context) {
 	c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
 }
 
+func (rh RequestHandler) GetAllCustomers(c *gin.Context) {
+	var res ResponseParam
+	var err error
+	var queryParam map[string][]string
+
+	queryParam = c.Request.URL.Query()
+
+	for key, value := range queryParam {
+		switch key {
+		case "page":
+			var page uint64
+			var pageConverted uint
+			page, err = strconv.ParseUint(value[0], 10, 64)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
+				return
+			}
+			pageConverted = uint(page)
+			res, err = rh.ctrl.GetAllCustomers(&pageConverted)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, dto.DefaultErrorWithResponse(res.ResponseMeta))
+				return
+			}
+			c.JSON(http.StatusOK, res)
+			return
+		}
+	}
+}
+
 func (rh RequestHandler) CreateCustomer(c *gin.Context) {
 	var request = CustomerParam{}
 	var err = c.Bind(&request)
@@ -157,6 +188,49 @@ func (rh RequestHandler) GetAdmin(c *gin.Context) {
 				return
 			}
 			res, err = rh.ctrl.GetAdminById(&ActorParam{Id: uint(adminId)})
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, dto.DefaultErrorWithResponse(res.ResponseMeta))
+				return
+			}
+			c.JSON(http.StatusOK, res)
+			return
+		case "username":
+			if value[0] == "" {
+				c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
+				return
+			}
+			var username = value[0]
+
+			res, err = rh.ctrl.GetAdminsByUsername(&ActorParam{Username: username})
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, dto.DefaultErrorWithResponse(res.ResponseMeta))
+				return
+			}
+			c.JSON(http.StatusOK, res)
+			return
+		}
+	}
+}
+
+func (rh RequestHandler) GetAllAdmins(c *gin.Context) {
+	var res ResponseParam
+	var err error
+	var queryParam map[string][]string
+
+	queryParam = c.Request.URL.Query()
+
+	for key, value := range queryParam {
+		switch key {
+		case "page":
+			var page uint64
+			var pageConverted uint
+			page, err = strconv.ParseUint(value[0], 10, 64)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
+				return
+			}
+			pageConverted = uint(page)
+			res, err = rh.ctrl.GetAllAdmins(&pageConverted)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, dto.DefaultErrorWithResponse(res.ResponseMeta))
 				return
