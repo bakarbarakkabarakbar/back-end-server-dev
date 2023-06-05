@@ -5,6 +5,7 @@ import "github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
 type CredentialParam struct {
 	username string
 	password string
+	roleId   uint
 }
 
 type ResponseParam struct {
