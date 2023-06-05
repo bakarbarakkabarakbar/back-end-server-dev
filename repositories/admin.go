@@ -19,11 +19,14 @@ func NewAdminRepo(dbCrud *gorm.DB) AdminRepo {
 type AdminRepoInterface interface {
 	GetCustomersByName(name *string) ([]entities.Customer, error)
 	GetCustomersByEmail(email *string) ([]entities.Customer, error)
+	GetAllCustomers(page *uint) ([]entities.Customer, error)
 	CreateCustomer(customer *entities.Customer) error
 	ModifyCustomer(customer *entities.Customer) error
 	RemoveCustomerById(id *uint) error
 
 	GetAdminById(id *uint) (entities.Actor, error)
+	GetAdminsByUsername(username *string) ([]entities.Actor, error)
+	GetAllAdmins(page *uint) ([]entities.Actor, error)
 	CreateAdmin(admin *entities.Actor) error
 	ModifyAdmin(admin *entities.Actor) error
 }
@@ -43,6 +46,16 @@ func (ar AdminRepo) GetCustomersByEmail(email *string) ([]entities.Customer, err
 	var customers = make([]entities.Customer, 0)
 	var err = ar.db.Raw(
 		fmt.Sprint("SELECT * FROM customers WHERE email LIKE \"%", *email, "%\"")).Scan(&customers).Error
+	if err != nil {
+		return nil, err
+	}
+	return customers, nil
+}
+
+func (ar AdminRepo) GetAllCustomers(page *uint) ([]entities.Customer, error) {
+	var customers = make([]entities.Customer, 0)
+	var err = ar.db.Raw(
+		fmt.Sprint("SELECT * FROM customers LIMIT 6 OFFSET ", (*page-1)*6)).Scan(&customers).Error
 	if err != nil {
 		return nil, err
 	}
@@ -77,6 +90,26 @@ func (ar AdminRepo) GetAdminById(id *uint) (entities.Actor, error) {
 		return admin, err
 	}
 	return admin, nil
+}
+
+func (ar AdminRepo) GetAdminsByUsername(username *string) ([]entities.Actor, error) {
+	var actors = make([]entities.Actor, 0)
+	var err = ar.db.Raw(
+		fmt.Sprint("SELECT * FROM actors WHERE username LIKE \"%", *username, "%\"")).Scan(&actors).Error
+	if err != nil {
+		return nil, err
+	}
+	return actors, nil
+}
+
+func (ar AdminRepo) GetAllAdmins(page *uint) ([]entities.Actor, error) {
+	var actors = make([]entities.Actor, 0)
+	var err = ar.db.Raw(
+		fmt.Sprint("SELECT * FROM actors LIMIT 6 OFFSET ", (*page-1)*6)).Scan(&actors).Error
+	if err != nil {
+		return nil, err
+	}
+	return actors, nil
 }
 
 func (ar AdminRepo) CreateAdmin(admin *entities.Actor) error {
