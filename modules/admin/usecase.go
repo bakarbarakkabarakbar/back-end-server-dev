@@ -2,6 +2,7 @@ package admin
 
 import (
 	"crypto/sha1"
+	"errors"
 	"fmt"
 	"github.com/dibimbing-satkom-indo/onion-architecture-go/entities"
 	"github.com/dibimbing-satkom-indo/onion-architecture-go/repositories"
@@ -24,7 +25,6 @@ type UseCaseInterface interface {
 	GetAdminById(admin *ActorParam) (ActorParam, error)
 	CreateAdmin(admin *ActorParamWithPassword) error
 	ModifyAdmin(admin *ActorParamWithPassword) error
-	RemoveAdminById(admin *ActorParam) (ActorParam, error)
 }
 
 func (uc UseCase) GetCustomerById(customer *CustomerParam) (CustomerParam, error) {
@@ -41,6 +41,9 @@ func (uc UseCase) GetCustomerById(customer *CustomerParam) (CustomerParam, error
 func (uc UseCase) GetCustomersByName(customer *CustomerParam) ([]CustomerParam, error) {
 	var customers = make([]CustomerParam, 0)
 	var results, err = uc.adminRepo.GetCustomersByName(&customer.FirstName)
+	if len(results) == 0 {
+		return nil, errors.New("no match found")
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -63,6 +66,9 @@ func (uc UseCase) GetCustomersByEmail(customer *CustomerParam) ([]CustomerParam,
 	if err != nil {
 		return nil, err
 	}
+	if len(results) == 0 {
+		return nil, errors.New("no match found")
+	}
 
 	for _, result := range results {
 		customers = append(customers, CustomerParam{
@@ -80,6 +86,7 @@ func (uc UseCase) CreateCustomer(customer *CustomerParam) error {
 	var newCustomer *entities.Customer
 
 	newCustomer = &entities.Customer{
+		Id:         customer.Id,
 		FirstName:  customer.FirstName,
 		LastName:   customer.LastName,
 		Email:      customer.Email,
@@ -152,6 +159,7 @@ func (uc UseCase) CreateAdmin(admin *ActorParamWithPassword) error {
 	hash.Write([]byte(admin.Password))
 
 	newAdmin = &entities.Actor{
+		Id:         admin.Id,
 		Username:   admin.Username,
 		Password:   fmt.Sprintf("%x", hash.Sum(nil)),
 		RoleId:     admin.RoleId,
@@ -176,8 +184,8 @@ func (uc UseCase) ModifyAdmin(admin *ActorParamWithPassword) error {
 
 	newAdmin = &entities.Actor{
 		Id:         admin.Id,
-		Username:   fmt.Sprintf("%x", hash.Sum(nil)),
-		Password:   admin.Password,
+		Username:   admin.Username,
+		Password:   fmt.Sprintf("%x", hash.Sum(nil)),
 		RoleId:     admin.RoleId,
 		IsVerified: result.IsVerified,
 		IsActive:   result.IsActive,
@@ -187,25 +195,4 @@ func (uc UseCase) ModifyAdmin(admin *ActorParamWithPassword) error {
 
 	err = uc.adminRepo.ModifyAdmin(newAdmin)
 	return err
-}
-
-func (uc UseCase) RemoveAdminById(admin *ActorParam) (ActorParam, error) {
-	var result, err = uc.adminRepo.GetAdminById(&admin.Id)
-	if err != nil {
-		return ActorParam{}, err
-	}
-
-	err = uc.adminRepo.RemoveAdminById(&admin.Id)
-	if err != nil {
-		return ActorParam{}, err
-	}
-	var deletedCustomer = ActorParam{
-		Id:         admin.Id,
-		Username:   result.Username,
-		RoleId:     result.RoleId,
-		IsVerified: result.IsVerified,
-		IsActive:   result.IsActive,
-	}
-
-	return deletedCustomer, err
 }
