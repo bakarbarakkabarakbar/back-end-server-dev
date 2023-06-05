@@ -26,7 +26,6 @@ type AdminRepoInterface interface {
 	GetAdminById(id *uint) (entities.Actor, error)
 	CreateAdmin(admin *entities.Actor) error
 	ModifyAdmin(admin *entities.Actor) error
-	RemoveAdminById(id *uint) error
 }
 
 func (ar AdminRepo) GetCustomersByName(name *string) ([]entities.Customer, error) {
@@ -42,7 +41,8 @@ func (ar AdminRepo) GetCustomersByName(name *string) ([]entities.Customer, error
 
 func (ar AdminRepo) GetCustomersByEmail(email *string) ([]entities.Customer, error) {
 	var customers = make([]entities.Customer, 0)
-	var err = ar.db.Where(&entities.Customer{Email: *email}).Find(&customers).Error
+	var err = ar.db.Raw(
+		fmt.Sprint("SELECT * FROM customers WHERE email LIKE \"%", *email, "%\"")).Scan(&customers).Error
 	if err != nil {
 		return nil, err
 	}
@@ -87,15 +87,4 @@ func (ar AdminRepo) CreateAdmin(admin *entities.Actor) error {
 func (ar AdminRepo) ModifyAdmin(admin *entities.Actor) error {
 	err := ar.db.Save(&admin).Error
 	return err
-}
-
-func (ar AdminRepo) RemoveAdminById(id *uint) error {
-	var admin *entities.Actor
-	var err error
-	err = ar.db.Delete(&admin, id).Error
-
-	if err != nil {
-		return err
-	}
-	return nil
 }
