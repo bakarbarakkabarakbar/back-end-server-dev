@@ -42,31 +42,36 @@ func (r Router) Router(router *gin.Engine) {
 	userPathGroup.GET("/", r.customerReqHandler.GetCustomer)
 
 	var adminPath = "/admin"
-	var adminPathGroup = router.Group(adminPath, r.authReqHandler.CheckAuthorization)
-
+	var adminPathGroup = router.Group(adminPath, r.authReqHandler.CheckAdminAuthorization)
 	adminPathGroup.POST("/", r.adminReqHandler.CreateAdmin)
 	adminPathGroup.GET("/", r.adminReqHandler.GetAdmin)
 	adminPathGroup.PUT("/", r.adminReqHandler.ModifyAdmin)
+	adminPathGroup.GET("/customers", r.adminReqHandler.GetAllCustomers)
 
-	adminPathGroup.POST("/customer", r.adminReqHandler.CreateCustomer)
-	adminPathGroup.GET("/customer", r.adminReqHandler.GetCustomers)
-	adminPathGroup.PUT("/customer", r.adminReqHandler.ModifyCustomer)
-	adminPathGroup.DELETE("/customer", r.adminReqHandler.RemoveCustomer)
+	var adminCustomerPath = "/admin/customer"
+	var adminCustomerPathGroup = router.Group(adminCustomerPath, r.authReqHandler.CheckAdminAuthorization)
+	adminCustomerPathGroup.POST("/", r.adminReqHandler.CreateCustomer)
+	adminCustomerPathGroup.GET("/", r.adminReqHandler.GetCustomers)
+	adminCustomerPathGroup.PUT("/", r.adminReqHandler.ModifyCustomer)
+	adminCustomerPathGroup.DELETE("/", r.adminReqHandler.RemoveCustomer)
 
 	var superAdminPath = "/super-admin"
-	var superAdminPathGroup = router.Group(superAdminPath, r.authReqHandler.CheckAuthorization)
+	var superAdminPathGroup = router.Group(superAdminPath, r.authReqHandler.CheckSuperAdminAuthorization)
 	superAdminPathGroup.POST("/", r.adminReqHandler.CreateAdmin)
 	superAdminPathGroup.GET("/", r.adminReqHandler.GetAdmin)
 	superAdminPathGroup.PUT("/", r.adminReqHandler.ModifyAdmin)
 	superAdminPathGroup.DELETE("/", r.superAdminReqHandler.RemoveAdmin)
-
-	superAdminPathGroup.POST("/customer", r.adminReqHandler.CreateCustomer)
-	superAdminPathGroup.GET("/customer", r.adminReqHandler.GetCustomers)
-	superAdminPathGroup.PUT("/customer", r.adminReqHandler.ModifyCustomer)
-	superAdminPathGroup.DELETE("/customer", r.adminReqHandler.RemoveCustomer)
-
 	superAdminPathGroup.GET("/verified-admin", r.superAdminReqHandler.GetVerifiedAdmin)
 	superAdminPathGroup.GET("/active-admin", r.superAdminReqHandler.GetActiveAdmin)
 	superAdminPathGroup.PUT("/status-admin", r.superAdminReqHandler.ModifyAdminStatusById)
+	superAdminPathGroup.GET("/customers", r.adminReqHandler.GetAllCustomers)
+	superAdminPathGroup.GET("/admins", r.adminReqHandler.GetAllAdmins)
+
+	var superAdminCustomerPath = "/super-admin/customer"
+	var superAdminCustomerPathGroup = router.Group(superAdminCustomerPath, r.authReqHandler.CheckSuperAdminAuthorization)
+	superAdminCustomerPathGroup.POST("/", r.adminReqHandler.CreateCustomer)
+	superAdminCustomerPathGroup.GET("/", r.adminReqHandler.GetCustomers)
+	superAdminCustomerPathGroup.PUT("/", r.adminReqHandler.ModifyCustomer)
+	superAdminCustomerPathGroup.DELETE("/", r.adminReqHandler.RemoveCustomer)
 
 }
