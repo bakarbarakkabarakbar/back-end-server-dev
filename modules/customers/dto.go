@@ -14,5 +14,5 @@ type CustomerParam struct {
 
 type ResponseParam struct {
 	dto.ResponseMeta
-	Data CustomerParam `json:"data"`
+	Data any `json:"data"`
 }
