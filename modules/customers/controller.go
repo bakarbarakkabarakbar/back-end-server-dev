@@ -16,7 +16,15 @@ type ControllerInterface interface {
 func (ctrl Controller) GetCustomerById(req *CustomerParam) (ResponseParam, error) {
 	var customer, err = ctrl.uc.GetCustomerById(req)
 	if err != nil {
-		return ResponseParam{}, err
+		return ResponseParam{
+			ResponseMeta: dto.ResponseMeta{
+				Success:      false,
+				MessageTitle: "Failed GetCustomerById",
+				Message:      err.Error(),
+				ResponseTime: "",
+			},
+			Data: nil,
+		}, err
 	}
 
 	var res = ResponseParam{
@@ -34,7 +42,15 @@ func (ctrl Controller) GetCustomerById(req *CustomerParam) (ResponseParam, error
 func (ctrl Controller) GetCustomerByEmail(req *CustomerParam) (ResponseParam, error) {
 	var customers, err = ctrl.uc.GetCustomerByEmail(req)
 	if err != nil {
-		return ResponseParam{}, err
+		return ResponseParam{
+			ResponseMeta: dto.ResponseMeta{
+				Success:      false,
+				MessageTitle: "Failed GetCustomerByEmail",
+				Message:      err.Error(),
+				ResponseTime: "",
+			},
+			Data: nil,
+		}, err
 	}
 
 	var res = ResponseParam{
