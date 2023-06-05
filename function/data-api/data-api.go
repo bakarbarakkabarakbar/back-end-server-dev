@@ -8,7 +8,7 @@ import (
 
 func GetData(api *string) ([]CustomerParam, error) {
 	var res *http.Response
-	var dataCollection []CustomerParam
+	var dataCollection CustomersParam
 	var err error
 	var body []byte
 	res, err = http.Get(*api)
@@ -22,5 +22,5 @@ func GetData(api *string) ([]CustomerParam, error) {
 	if err != nil {
 		return nil, err
 	}
-	return dataCollection, nil
+	return dataCollection.Data, nil
 }
