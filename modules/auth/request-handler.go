@@ -15,7 +15,8 @@ type RequestHandler struct {
 }
 
 type RequestHandlerInterface interface {
-	CheckAuthorization(c *gin.Context)
+	CheckSuperAdminAuthorization(c *gin.Context)
+	CheckAdminAuthorization(c *gin.Context)
 	CreateAuthorization(c *gin.Context)
 }
 
@@ -29,7 +30,7 @@ func NewRequestHandler(dbCrud *gorm.DB) RequestHandler {
 	}
 }
 
-func (rh RequestHandler) CheckAuthorization(c *gin.Context) {
+func (rh RequestHandler) CheckSuperAdminAuthorization(c *gin.Context) {
 	var header jwt.AuthHeader
 	var err error
 	err = c.BindHeader(&header)
@@ -46,7 +47,34 @@ func (rh RequestHandler) CheckAuthorization(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	_, err = jwt.VerifyToken(&header)
+	_, err = jwt.VerifySuperAdminToken(&header)
+
+	if err != nil {
+		fmt.Println("Error account credentials")
+		c.JSON(http.StatusUnauthorized, dto.DefaultErrorInvalidDataWithMessage("Error account credentials", err.Error()))
+		c.Abort()
+		return
+	}
+}
+
+func (rh RequestHandler) CheckAdminAuthorization(c *gin.Context) {
+	var header jwt.AuthHeader
+	var err error
+	err = c.BindHeader(&header)
+	if err != nil {
+		fmt.Println("Error binding authorization")
+		c.JSON(http.StatusUnauthorized, dto.DefaultErrorInvalidDataWithMessage("Error binding authorization", err.Error()))
+		c.Abort()
+		return
+	}
+
+	if header.Bearer == "" {
+		fmt.Println("Error no authorization token")
+		c.JSON(http.StatusUnauthorized, dto.DefaultErrorInvalidDataWithMessage("Error no authorization token", err.Error()))
+		c.Abort()
+		return
+	}
+	_, err = jwt.VerifyAdminToken(&header)
 
 	if err != nil {
 		fmt.Println("Error account credentials")
@@ -80,6 +108,7 @@ func (rh RequestHandler) CreateAuthorization(c *gin.Context) {
 	header, err = jwt.GenerateToken(&jwt.CredentialParam{
 		Username: username,
 		Password: password,
+		RoleId:   res.Data.roleId,
 	})
 	if err != nil {
 		fmt.Println("Error account credentials")
