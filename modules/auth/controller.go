@@ -25,7 +25,7 @@ func (ctrl Controller) CheckAccountCredential(req *CredentialParam) (ResponsePar
 		return ResponseParam{
 			ResponseMeta: dto.ResponseMeta{
 				Success:      false,
-				MessageTitle: "Failed CheckAuthorization",
+				MessageTitle: "Failed CheckAdminAuthorization",
 				Message:      err.Error(),
 				ResponseTime: "",
 			},
@@ -35,17 +35,17 @@ func (ctrl Controller) CheckAccountCredential(req *CredentialParam) (ResponsePar
 		return ResponseParam{
 			ResponseMeta: dto.ResponseMeta{
 				Success:      false,
-				MessageTitle: "Failed CheckAuthorization",
+				MessageTitle: "Failed CheckAdminAuthorization",
 				Message:      "credential not match",
 				ResponseTime: "",
 			},
-			Data: CredentialParam{}}, errors.New("failed CheckAuthorization")
+			Data: CredentialParam{}}, errors.New("failed CheckAdminAuthorization")
 	}
 
 	var res = ResponseParam{
 		ResponseMeta: dto.ResponseMeta{
 			Success:      true,
-			MessageTitle: "Success CheckAuthorization",
+			MessageTitle: "Success CheckAdminAuthorization",
 			Message:      "Success",
 			ResponseTime: "",
 		},
