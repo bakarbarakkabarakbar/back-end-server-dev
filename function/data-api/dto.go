@@ -15,3 +15,7 @@ type CustomerParam struct {
 	Email     string `json:"email"`
 	Avatar    string `json:"avatar"`
 }
+
+type CustomersParam struct {
+	Data []CustomerParam `json:"data"`
+}
