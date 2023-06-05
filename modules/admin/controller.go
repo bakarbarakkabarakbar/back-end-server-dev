@@ -8,7 +8,7 @@ type Controller struct {
 
 type ControllerInterface interface {
 	GetCustomerById(req *CustomerParam) (ResponseParam, error)
-	GetCustomerByName(req *CustomerParam) (ResponseParam, error)
+	GetCustomersByName(req *CustomerParam) (ResponseParam, error)
 	GetCustomersByEmail(req *CustomerParam) (ResponseParam, error)
 	CreateCustomer(req *CustomerParam) (ResponseParam, error)
 	ModifyCustomer(req *CustomerParam) (ResponseParam, error)
@@ -17,7 +17,6 @@ type ControllerInterface interface {
 	GetAdminById(req *ActorParam) (ResponseParam, error)
 	CreateAdmin(req *ActorParamWithPassword) (ResponseParam, error)
 	ModifyAdmin(req *ActorParamWithPassword) (ResponseParam, error)
-	RemoveAdminById(req *ActorParam) (ResponseParam, error)
 }
 
 func (ctrl Controller) GetCustomerById(req *CustomerParam) (ResponseParam, error) {
@@ -46,13 +45,13 @@ func (ctrl Controller) GetCustomerById(req *CustomerParam) (ResponseParam, error
 	return res, nil
 }
 
-func (ctrl Controller) GetCustomerByName(req *CustomerParam) (ResponseParam, error) {
+func (ctrl Controller) GetCustomersByName(req *CustomerParam) (ResponseParam, error) {
 	var customers, err = ctrl.uc.GetCustomersByName(req)
 	if err != nil {
 		return ResponseParam{
 			ResponseMeta: dto.ResponseMeta{
 				Success:      false,
-				MessageTitle: "Failed GetCustomerByName",
+				MessageTitle: "Failed GetCustomersByName",
 				Message:      err.Error(),
 				ResponseTime: "",
 			},
@@ -63,7 +62,7 @@ func (ctrl Controller) GetCustomerByName(req *CustomerParam) (ResponseParam, err
 	var res = ResponseParam{
 		ResponseMeta: dto.ResponseMeta{
 			Success:      true,
-			MessageTitle: "Success GetCustomerByName",
+			MessageTitle: "Success GetCustomersByName",
 			Message:      "Success",
 			ResponseTime: "",
 		},
@@ -204,7 +203,7 @@ func (ctrl Controller) CreateAdmin(req *ActorParamWithPassword) (ResponseParam, 
 		return ResponseParam{ResponseMeta: dto.ResponseMeta{
 			Success:      false,
 			MessageTitle: "Failed CreateAdmin",
-			Message:      "Failed",
+			Message:      err.Error(),
 			ResponseTime: "",
 		}}, err
 	}
@@ -217,8 +216,9 @@ func (ctrl Controller) CreateAdmin(req *ActorParamWithPassword) (ResponseParam, 
 			ResponseTime: "",
 		},
 		Data: ActorParam{
+			Id:         req.Id,
 			Username:   req.Username,
-			RoleId:     req.Id,
+			RoleId:     req.RoleId,
 			IsVerified: "false",
 			IsActive:   "false",
 		},
@@ -243,35 +243,6 @@ func (ctrl Controller) ModifyAdmin(req *ActorParamWithPassword) (ResponseParam, 
 			MessageTitle: "Success ModifyAdmin",
 			Message:      "Success",
 			ResponseTime: "",
-		},
-	}
-	return res, nil
-}
-
-func (ctrl Controller) RemoveAdminById(req *ActorParam) (ResponseParam, error) {
-	var admin, err = ctrl.uc.RemoveAdminById(req)
-	if err != nil {
-		return ResponseParam{ResponseMeta: dto.ResponseMeta{
-			Success:      false,
-			MessageTitle: "Failed RemoveAdminById",
-			Message:      err.Error(),
-			ResponseTime: "",
-		}}, err
-	}
-
-	var res = ResponseParam{
-		ResponseMeta: dto.ResponseMeta{
-			Success:      true,
-			MessageTitle: "Success RemoveAdminById",
-			Message:      "Success",
-			ResponseTime: "",
-		},
-		Data: ActorParam{
-			Id:         req.Id,
-			Username:   admin.Username,
-			RoleId:     admin.RoleId,
-			IsVerified: admin.IsVerified,
-			IsActive:   admin.IsActive,
 		},
 	}
 	return res, nil
