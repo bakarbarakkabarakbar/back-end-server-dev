@@ -1,7 +1,7 @@
 package customers
 
 import (
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
+	"back-end-server-dev/dto"
 )
 
 type Controller struct {
