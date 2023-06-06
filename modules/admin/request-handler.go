@@ -1,8 +1,8 @@
 package admin
 
 import (
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/repositories"
+	"back-end-server-dev/dto"
+	"back-end-server-dev/repositories"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
@@ -11,6 +11,17 @@ import (
 
 type RequestHandler struct {
 	ctrl ControllerInterface
+}
+
+func NewRequestHandler(dbCrud *gorm.DB) RequestHandler {
+	return RequestHandler{
+		ctrl: Controller{
+			uc: UseCase{
+				adminRepo:    repositories.NewAdminRepo(dbCrud),
+				customerRepo: repositories.NewCustomerRepo(dbCrud),
+			},
+		},
+	}
 }
 
 type RequestHandlerInterface interface {
@@ -23,18 +34,8 @@ type RequestHandlerInterface interface {
 	GetAdmin(c *gin.Context)
 	GetAllAdmins(c *gin.Context)
 	CreateAdmin(c *gin.Context)
+	CreateRegisterAdmin(c *gin.Context)
 	ModifyAdmin(c *gin.Context)
-}
-
-func NewRequestHandler(dbCrud *gorm.DB) RequestHandler {
-	return RequestHandler{
-		ctrl: Controller{
-			uc: UseCase{
-				adminRepo:    repositories.NewAdminRepo(dbCrud),
-				customerRepo: repositories.NewCustomerRepo(dbCrud),
-			},
-		},
-	}
 }
 
 func (rh RequestHandler) GetCustomers(c *gin.Context) {
@@ -242,7 +243,6 @@ func (rh RequestHandler) GetAllAdmins(c *gin.Context) {
 }
 
 func (rh RequestHandler) CreateAdmin(c *gin.Context) {
-
 	var request = ActorParamWithPassword{}
 	var err = c.Bind(&request)
 	if err != nil {
@@ -251,6 +251,22 @@ func (rh RequestHandler) CreateAdmin(c *gin.Context) {
 	}
 	var res ResponseParam
 	res, err = rh.ctrl.CreateAdmin(&request)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, dto.DefaultErrorWithResponse(res.ResponseMeta))
+		return
+	}
+	c.JSON(http.StatusOK, res)
+}
+
+func (rh RequestHandler) CreateRegisterAdmin(c *gin.Context) {
+	var request = RegisterApprovalParam{}
+	var err = c.Bind(&request)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dto.DefaultBadRequestResponse())
+		return
+	}
+	var res ResponseParam
+	res, err = rh.ctrl.CreateRegisterAdmin(&request)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, dto.DefaultErrorWithResponse(res.ResponseMeta))
 		return
