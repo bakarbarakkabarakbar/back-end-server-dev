@@ -1,13 +1,13 @@
 package customers
 
 import (
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/repositories"
+	"back-end-server-dev/repositories"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
+	"back-end-server-dev/dto"
 )
 
 type RequestHandler struct {
