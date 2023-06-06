@@ -1,11 +1,11 @@
 package admin
 
 import (
+	"back-end-server-dev/entities"
+	"back-end-server-dev/repositories"
 	"crypto/sha1"
 	"errors"
 	"fmt"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/entities"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/repositories"
 	"time"
 )
 
@@ -27,6 +27,7 @@ type UseCaseInterface interface {
 	GetAdminsByUsername(admin *ActorParam) ([]ActorParam, error)
 	GetAllAdmins(page *uint) ([]ActorParam, error)
 	CreateAdmin(admin *ActorParamWithPassword) error
+	CreateRegisterAdmin(admin *RegisterApprovalParam) error
 	ModifyAdmin(admin *ActorParamWithPassword) error
 }
 
@@ -239,6 +240,20 @@ func (uc UseCase) CreateAdmin(admin *ActorParamWithPassword) error {
 	}
 
 	var err = uc.adminRepo.CreateAdmin(newAdmin)
+	return err
+}
+
+func (uc UseCase) CreateRegisterAdmin(admin *RegisterApprovalParam) error {
+	var newRegistry *entities.RegisterApproval
+
+	newRegistry = &entities.RegisterApproval{
+		Id:           admin.Id,
+		AdminId:      admin.AdminId,
+		SuperAdminId: admin.SuperAdminId,
+		Status:       "pending",
+	}
+
+	var err = uc.adminRepo.CreateRegisterAdmin(newRegistry)
 	return err
 }
 
