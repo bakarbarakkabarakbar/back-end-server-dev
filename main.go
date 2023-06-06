@@ -1,9 +1,9 @@
 package main
 
 import (
+	"back-end-server-dev/modules/router"
+	"back-end-server-dev/utils/db"
 	"fmt"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/modules/router"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/utils/db"
 	"github.com/gin-gonic/gin"
 	"log"
 )
