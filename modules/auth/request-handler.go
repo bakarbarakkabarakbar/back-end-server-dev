@@ -1,17 +1,17 @@
 package auth
 
 import (
+	"back-end-server-dev/dto"
+	"back-end-server-dev/function/jwt"
+	"back-end-server-dev/repositories"
 	"fmt"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/function/jwt"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/repositories"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
 )
 
 type RequestHandler struct {
-	ctrl Controller
+	ctrl ControllerInterface
 }
 
 type RequestHandlerInterface interface {
@@ -47,8 +47,16 @@ func (rh RequestHandler) CheckSuperAdminAuthorization(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	_, err = jwt.VerifySuperAdminToken(&header)
 
+	_, err = rh.ctrl.GetLastActorSessionByToken(&ActorSession{Token: header.Bearer})
+	if err != nil {
+		fmt.Println("Error account credentials")
+		c.JSON(http.StatusUnauthorized, dto.DefaultErrorInvalidDataWithMessage("Error account recorded credentials", err.Error()))
+		c.Abort()
+		return
+	}
+
+	header, err = jwt.VerifySuperAdminToken(&header)
 	if err != nil {
 		fmt.Println("Error account credentials")
 		c.JSON(http.StatusUnauthorized, dto.DefaultErrorInvalidDataWithMessage("Error account credentials", err.Error()))
@@ -74,8 +82,16 @@ func (rh RequestHandler) CheckAdminAuthorization(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	_, err = jwt.VerifyAdminToken(&header)
 
+	_, err = rh.ctrl.GetLastActorSessionByToken(&ActorSession{Token: header.Bearer})
+	if err != nil {
+		fmt.Println("Error account credentials")
+		c.JSON(http.StatusUnauthorized, dto.DefaultErrorInvalidDataWithMessage("Error account recorded credentials", err.Error()))
+		c.Abort()
+		return
+	}
+
+	header, err = jwt.VerifyAdminToken(&header)
 	if err != nil {
 		fmt.Println("Error account credentials")
 		c.JSON(http.StatusUnauthorized, dto.DefaultErrorInvalidDataWithMessage("Error account credentials", err.Error()))
@@ -108,7 +124,17 @@ func (rh RequestHandler) CreateAuthorization(c *gin.Context) {
 	header, err = jwt.GenerateToken(&jwt.CredentialParam{
 		Username: username,
 		Password: password,
-		RoleId:   res.Data.roleId,
+		RoleId:   res.Data.(CredentialParam).roleId,
+	})
+	if err != nil {
+		fmt.Println("Error account credentials")
+		c.JSON(http.StatusUnauthorized, dto.DefaultErrorInvalidDataWithMessage("Error account credentials", err.Error()))
+		c.Abort()
+		return
+	}
+	res, err = rh.ctrl.CreateActorSession(&ActorSession{
+		ActorId: res.Data.(CredentialParam).id,
+		Token:   header.Bearer,
 	})
 	if err != nil {
 		fmt.Println("Error account credentials")
@@ -117,12 +143,4 @@ func (rh RequestHandler) CreateAuthorization(c *gin.Context) {
 		return
 	}
 	c.Header("Authorization", header.Bearer)
-	if err != nil {
-		fmt.Println("Error account credentials")
-		c.JSON(http.StatusUnauthorized, dto.DefaultErrorInvalidDataWithMessage("Error account credentials", err.Error()))
-		c.Abort()
-		return
-	}
-	fmt.Printf("Username: %s\n", username)
-	fmt.Println(header.Bearer)
 }
