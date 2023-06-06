@@ -1,9 +1,9 @@
 package admin
 
 import (
+	"back-end-server-dev/dto"
+	data_api "back-end-server-dev/function/data-api"
 	"errors"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
-	data_api "github.com/dibimbing-satkom-indo/onion-architecture-go/function/data-api"
 )
 
 type Controller struct {
@@ -23,6 +23,7 @@ type ControllerInterface interface {
 	GetAdminsByUsername(req *ActorParam) (ResponseParam, error)
 	GetAllAdmins(req *uint) (ResponseParam, error)
 	CreateAdmin(req *ActorParamWithPassword) (ResponseParam, error)
+	CreateRegisterAdmin(req *RegisterApprovalParam) (ResponseParam, error)
 	ModifyAdmin(req *ActorParamWithPassword) (ResponseParam, error)
 }
 
@@ -211,7 +212,7 @@ func (ctrl Controller) CreateCustomer(req *CustomerParam) (ResponseParam, error)
 		return ResponseParam{ResponseMeta: dto.ResponseMeta{
 			Success:      false,
 			MessageTitle: "Failed CreateCustomer",
-			Message:      "Failed",
+			Message:      err.Error(),
 			ResponseTime: "",
 		}}, err
 	}
@@ -392,6 +393,34 @@ func (ctrl Controller) CreateAdmin(req *ActorParamWithPassword) (ResponseParam, 
 			RoleId:     req.RoleId,
 			IsVerified: "false",
 			IsActive:   "false",
+		},
+	}
+	return res, nil
+}
+
+func (ctrl Controller) CreateRegisterAdmin(req *RegisterApprovalParam) (ResponseParam, error) {
+	var err = ctrl.uc.CreateRegisterAdmin(req)
+	if err != nil {
+		return ResponseParam{ResponseMeta: dto.ResponseMeta{
+			Success:      false,
+			MessageTitle: "Failed CreateRegisterAdmin",
+			Message:      err.Error(),
+			ResponseTime: "",
+		}}, err
+	}
+
+	var res = ResponseParam{
+		ResponseMeta: dto.ResponseMeta{
+			Success:      true,
+			MessageTitle: "Success CreateRegisterAdmin",
+			Message:      "Success",
+			ResponseTime: "",
+		},
+		Data: RegisterApprovalParam{
+			Id:           req.Id,
+			AdminId:      req.AdminId,
+			SuperAdminId: req.SuperAdminId,
+			Status:       "pending",
 		},
 	}
 	return res, nil
