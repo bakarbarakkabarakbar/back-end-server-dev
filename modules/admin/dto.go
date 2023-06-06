@@ -1,6 +1,6 @@
 package admin
 
-import "github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
+import "back-end-server-dev/dto"
 
 type CustomerParam struct {
 	Id        uint   `json:"id"`
@@ -30,4 +30,11 @@ type ActorParam struct {
 type ResponseParam struct {
 	dto.ResponseMeta
 	Data any `json:"data"`
+}
+
+type RegisterApprovalParam struct {
+	Id           uint   `json:"id"`
+	AdminId      uint   `json:"admin_id"`
+	SuperAdminId uint   `json:"super_admin_id"`
+	Status       string `json:"status"`
 }
