@@ -1,8 +1,8 @@
 package repositories
 
 import (
+	"back-end-server-dev/entities"
 	"fmt"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/entities"
 	"gorm.io/gorm"
 )
 
@@ -28,6 +28,7 @@ type AdminRepoInterface interface {
 	GetAdminsByUsername(username *string) ([]entities.Actor, error)
 	GetAllAdmins(page *uint) ([]entities.Actor, error)
 	CreateAdmin(admin *entities.Actor) error
+	CreateRegisterAdmin(register *entities.RegisterApproval) error
 	ModifyAdmin(admin *entities.Actor) error
 }
 
@@ -114,6 +115,11 @@ func (ar AdminRepo) GetAllAdmins(page *uint) ([]entities.Actor, error) {
 
 func (ar AdminRepo) CreateAdmin(admin *entities.Actor) error {
 	err := ar.db.Model(&entities.Actor{}).Create(admin).Error
+	return err
+}
+
+func (ar AdminRepo) CreateRegisterAdmin(register *entities.RegisterApproval) error {
+	err := ar.db.Model(&entities.RegisterApproval{}).Create(register).Error
 	return err
 }
 
