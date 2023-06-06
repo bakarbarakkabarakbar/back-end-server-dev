@@ -1,26 +1,32 @@
 package super_admin
 
-import "github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
+import "back-end-server-dev/dto"
 
 type Controller struct {
 	uc UseCaseInterface
 }
 
 type ControllerInterface interface {
-	GetVerifiedAdmin() (ResponseParam, error)
-	GetActiveAdmin() (ResponseParam, error)
-	ModifyAdminStatusById(req *ActorStatusParam) (ResponseParam, error)
+	GetVerifiedAdmins() (ResponseParam, error)
+	GetActiveAdmins() (ResponseParam, error)
+	GetRegisterAdminById(req *RegisterApprovalParam) (ResponseParam, error)
+	GetApprovedAdmins() (ResponseParam, error)
+	GetRejectedAdmins() (ResponseParam, error)
+	GetPendingAdmins() (ResponseParam, error)
+	ModifyStatusAdminById(req *ActorParam) (ResponseParam, error)
+	ModifyRegisterAdminById(req *RegisterApprovalParam) (ResponseParam, error)
 	RemoveAdminById(req *ActorParam) (ResponseParam, error)
+	RemoveRegisterAdminById(req *RegisterApprovalParam) (ResponseParam, error)
 }
 
-func (ctrl Controller) GetVerifiedAdmin() (ResponseParam, error) {
-	var results []ActorStatusParam
+func (ctrl Controller) GetVerifiedAdmins() (ResponseParam, error) {
+	var results []ActorParam
 	var err error
 	results, err = ctrl.uc.GetVerifiedAdmins()
 	if err != nil {
 		return ResponseParam{ResponseMeta: dto.ResponseMeta{
 			Success:      false,
-			MessageTitle: "Failed GetVerifiedAdmin",
+			MessageTitle: "Failed GetVerifiedAdmins",
 			Message:      err.Error(),
 			ResponseTime: "",
 		}}, err
@@ -29,7 +35,7 @@ func (ctrl Controller) GetVerifiedAdmin() (ResponseParam, error) {
 	var res = ResponseParam{
 		ResponseMeta: dto.ResponseMeta{
 			Success:      true,
-			MessageTitle: "Success GetVerifiedAdmin",
+			MessageTitle: "Success GetVerifiedAdmins",
 			Message:      "Success",
 			ResponseTime: "",
 		},
@@ -38,14 +44,14 @@ func (ctrl Controller) GetVerifiedAdmin() (ResponseParam, error) {
 	return res, nil
 }
 
-func (ctrl Controller) GetActiveAdmin() (ResponseParam, error) {
-	var results []ActorStatusParam
+func (ctrl Controller) GetActiveAdmins() (ResponseParam, error) {
+	var results []ActorParam
 	var err error
 	results, err = ctrl.uc.GetActiveAdmins()
 	if err != nil {
 		return ResponseParam{ResponseMeta: dto.ResponseMeta{
 			Success:      false,
-			MessageTitle: "Failed GetActiveAdmin",
+			MessageTitle: "Failed GetActiveAdmins",
 			Message:      err.Error(),
 			ResponseTime: "",
 		}}, err
@@ -54,7 +60,7 @@ func (ctrl Controller) GetActiveAdmin() (ResponseParam, error) {
 	var res = ResponseParam{
 		ResponseMeta: dto.ResponseMeta{
 			Success:      true,
-			MessageTitle: "Success GetActiveAdmin",
+			MessageTitle: "Success GetActiveAdmins",
 			Message:      "Success",
 			ResponseTime: "",
 		},
@@ -63,13 +69,14 @@ func (ctrl Controller) GetActiveAdmin() (ResponseParam, error) {
 	return res, nil
 }
 
-func (ctrl Controller) ModifyAdminStatusById(req *ActorStatusParam) (ResponseParam, error) {
+func (ctrl Controller) GetRegisterAdminById(req *RegisterApprovalParam) (ResponseParam, error) {
+	var result RegisterApprovalParam
 	var err error
-	err = ctrl.uc.ModifyAdminStatusById(req)
+	result, err = ctrl.uc.GetRegisterAdminById(req)
 	if err != nil {
 		return ResponseParam{ResponseMeta: dto.ResponseMeta{
 			Success:      false,
-			MessageTitle: "Failed ModifyAdminStatusById",
+			MessageTitle: "Failed GetRegisterAdminById",
 			Message:      err.Error(),
 			ResponseTime: "",
 		}}, err
@@ -78,7 +85,129 @@ func (ctrl Controller) ModifyAdminStatusById(req *ActorStatusParam) (ResponsePar
 	var res = ResponseParam{
 		ResponseMeta: dto.ResponseMeta{
 			Success:      true,
-			MessageTitle: "Success ModifyAdminStatusById",
+			MessageTitle: "Success GetRegisterAdminById",
+			Message:      "Success",
+			ResponseTime: "",
+		},
+		Data: result,
+	}
+	return res, nil
+}
+
+func (ctrl Controller) GetApprovedAdmins() (ResponseParam, error) {
+	var results []RegisterApprovalParam
+	var err error
+	results, err = ctrl.uc.GetApprovedAdmins()
+	if err != nil {
+		return ResponseParam{ResponseMeta: dto.ResponseMeta{
+			Success:      false,
+			MessageTitle: "Failed GetApprovedAdmins",
+			Message:      err.Error(),
+			ResponseTime: "",
+		}}, err
+	}
+
+	var res = ResponseParam{
+		ResponseMeta: dto.ResponseMeta{
+			Success:      true,
+			MessageTitle: "Success GetApprovedAdmins",
+			Message:      "Success",
+			ResponseTime: "",
+		},
+		Data: results,
+	}
+	return res, nil
+}
+
+func (ctrl Controller) GetRejectedAdmins() (ResponseParam, error) {
+	var results []RegisterApprovalParam
+	var err error
+	results, err = ctrl.uc.GetRejectedAdmin()
+	if err != nil {
+		return ResponseParam{ResponseMeta: dto.ResponseMeta{
+			Success:      false,
+			MessageTitle: "Failed GetRejectedAdmins",
+			Message:      err.Error(),
+			ResponseTime: "",
+		}}, err
+	}
+
+	var res = ResponseParam{
+		ResponseMeta: dto.ResponseMeta{
+			Success:      true,
+			MessageTitle: "Success GetRejectedAdmins",
+			Message:      "Success",
+			ResponseTime: "",
+		},
+		Data: results,
+	}
+	return res, nil
+}
+
+func (ctrl Controller) GetPendingAdmins() (ResponseParam, error) {
+	var results []RegisterApprovalParam
+	var err error
+	results, err = ctrl.uc.GetPendingAdmins()
+	if err != nil {
+		return ResponseParam{ResponseMeta: dto.ResponseMeta{
+			Success:      false,
+			MessageTitle: "Failed GetPendingAdmins",
+			Message:      err.Error(),
+			ResponseTime: "",
+		}}, err
+	}
+
+	var res = ResponseParam{
+		ResponseMeta: dto.ResponseMeta{
+			Success:      true,
+			MessageTitle: "Success GetPendingAdmins",
+			Message:      "Success",
+			ResponseTime: "",
+		},
+		Data: results,
+	}
+	return res, nil
+}
+
+func (ctrl Controller) ModifyStatusAdminById(req *ActorParam) (ResponseParam, error) {
+	var err error
+	err = ctrl.uc.ModifyStatusAdminById(req)
+	if err != nil {
+		return ResponseParam{ResponseMeta: dto.ResponseMeta{
+			Success:      false,
+			MessageTitle: "Failed ModifyStatusAdmin",
+			Message:      err.Error(),
+			ResponseTime: "",
+		}}, err
+	}
+
+	var res = ResponseParam{
+		ResponseMeta: dto.ResponseMeta{
+			Success:      true,
+			MessageTitle: "Success ModifyStatusAdmin",
+			Message:      "Success",
+			ResponseTime: "",
+		},
+	}
+	return res, nil
+}
+
+func (ctrl Controller) ModifyRegisterAdminById(req *RegisterApprovalParam) (ResponseParam, error) {
+	var err error
+	err = ctrl.uc.ModifyRegisterAdminById(req)
+	if err != nil {
+		return ResponseParam{ResponseMeta: dto.ResponseMeta{
+			Success:      false,
+			MessageTitle: "Failed ModifyRegisterAdminById",
+			Message:      err.Error(),
+			ResponseTime: "",
+		}}, err
+	}
+
+	var res = ResponseParam{
+		ResponseMeta: dto.ResponseMeta{
+			Success:      true,
+			MessageTitle: "Success ModifyRegisterAdminById",
 			Message:      "Success",
 			ResponseTime: "",
 		},
@@ -111,6 +240,29 @@ func (ctrl Controller) RemoveAdminById(req *ActorParam) (ResponseParam, error) {
 			IsVerified: admin.IsVerified,
 			IsActive:   admin.IsActive,
 		},
+	}
+	return res, nil
+}
+
+func (ctrl Controller) RemoveRegisterAdminById(req *RegisterApprovalParam) (ResponseParam, error) {
+	var result, err = ctrl.uc.RemoveRegisterAdminById(req)
+	if err != nil {
+		return ResponseParam{ResponseMeta: dto.ResponseMeta{
+			Success:      false,
+			MessageTitle: "Failed RemoveRegisterAdminById",
+			Message:      err.Error(),
+			ResponseTime: "",
+		}}, err
+	}
+
+	var res = ResponseParam{
+		ResponseMeta: dto.ResponseMeta{
+			Success:      true,
+			MessageTitle: "Success RemoveRegisterAdminById",
+			Message:      "Success",
+			ResponseTime: "",
+		},
+		Data: result,
 	}
 	return res, nil
 }
