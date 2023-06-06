@@ -1,8 +1,8 @@
 package super_admin
 
-import "github.com/dibimbing-satkom-indo/onion-architecture-go/dto"
+import "back-end-server-dev/dto"
 
-type ActorStatusParam struct {
+type ActorParam struct {
 	Id         uint   `json:"id"`
 	Username   string `json:"username"`
 	RoleId     uint   `json:"role_id"`
@@ -15,10 +15,9 @@ type ResponseParam struct {
 	Data any `json:"data"`
 }
 
-type ActorParam struct {
-	Id         uint   `json:"id"`
-	Username   string `json:"username"`
-	RoleId     uint   `json:"role_id"`
-	IsVerified string `json:"is_verified"`
-	IsActive   string `json:"is_active"`
+type RegisterApprovalParam struct {
+	Id           uint   `gorm:"primary_key"`
+	AdminId      uint   `gorm:"column:admin_id"`
+	SuperAdminId uint   `gorm:"column:super_admin_id"`
+	Status       string `gorm:"column:status"`
 }
