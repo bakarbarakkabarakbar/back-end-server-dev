@@ -1,7 +1,7 @@
 package customers
 
 import (
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/repositories"
+	"back-end-server-dev/repositories"
 )
 
 type UseCase struct {
