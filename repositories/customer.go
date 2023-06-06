@@ -1,8 +1,8 @@
 package repositories
 
 import (
+	"back-end-server-dev/entities"
 	"fmt"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/entities"
 	"gorm.io/gorm"
 )
 
