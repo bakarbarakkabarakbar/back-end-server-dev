@@ -48,7 +48,7 @@ func (rh RequestHandler) CheckSuperAdminAuthorization(c *gin.Context) {
 		return
 	}
 
-	_, err = rh.ctrl.GetLastActorSessionByToken(&ActorSession{Token: header.Bearer})
+	_, err = rh.ctrl.GetLastActorSessionByToken(&ActorSessionParam{Token: header.Bearer})
 	if err != nil {
 		fmt.Println("Error account credentials")
 		c.JSON(http.StatusUnauthorized, dto.DefaultErrorInvalidDataWithMessage("Error account recorded credentials", err.Error()))
@@ -83,7 +83,7 @@ func (rh RequestHandler) CheckAdminAuthorization(c *gin.Context) {
 		return
 	}
 
-	_, err = rh.ctrl.GetLastActorSessionByToken(&ActorSession{Token: header.Bearer})
+	_, err = rh.ctrl.GetLastActorSessionByToken(&ActorSessionParam{Token: header.Bearer})
 	if err != nil {
 		fmt.Println("Error account credentials")
 		c.JSON(http.StatusUnauthorized, dto.DefaultErrorInvalidDataWithMessage("Error account recorded credentials", err.Error()))
@@ -132,7 +132,7 @@ func (rh RequestHandler) CreateAuthorization(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	res, err = rh.ctrl.CreateActorSession(&ActorSession{
+	res, err = rh.ctrl.CreateActorSession(&ActorSessionParam{
 		ActorId: res.Data.(CredentialParam).id,
 		Token:   header.Bearer,
 	})
