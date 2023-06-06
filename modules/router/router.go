@@ -1,10 +1,10 @@
 package router
 
 import (
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/modules/admin"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/modules/auth"
-	"github.com/dibimbing-satkom-indo/onion-architecture-go/modules/customers"
-	super_admin "github.com/dibimbing-satkom-indo/onion-architecture-go/modules/super-admin"
+	"back-end-server-dev/modules/admin"
+	"back-end-server-dev/modules/auth"
+	"back-end-server-dev/modules/customers"
+	superAdmin "back-end-server-dev/modules/super-admin"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
@@ -14,7 +14,7 @@ type Router struct {
 	customerReqHandler   customers.RequestHandlerInterface
 	adminReqHandler      admin.RequestHandlerInterface
 	authReqHandler       auth.RequestHandlerInterface
-	superAdminReqHandler super_admin.RequestHandlerInterface
+	superAdminReqHandler superAdmin.RequestHandlerInterface
 }
 
 func NewRouter(dbCrud *gorm.DB) Router {
@@ -22,7 +22,7 @@ func NewRouter(dbCrud *gorm.DB) Router {
 		customerReqHandler:   customers.NewRequestHandler(dbCrud),
 		adminReqHandler:      admin.NewRequestHandler(dbCrud),
 		authReqHandler:       auth.NewRequestHandler(dbCrud),
-		superAdminReqHandler: super_admin.NewRequestHandler(dbCrud),
+		superAdminReqHandler: superAdmin.NewRequestHandler(dbCrud),
 	}
 }
 
@@ -47,6 +47,7 @@ func (r Router) Router(router *gin.Engine) {
 	adminPathGroup.GET("/", r.adminReqHandler.GetAdmin)
 	adminPathGroup.PUT("/", r.adminReqHandler.ModifyAdmin)
 	adminPathGroup.GET("/customers", r.adminReqHandler.GetAllCustomers)
+	adminPathGroup.POST("/register", r.adminReqHandler.CreateRegisterAdmin)
 
 	var adminCustomerPath = "/admin/customer"
 	var adminCustomerPathGroup = router.Group(adminCustomerPath, r.authReqHandler.CheckAdminAuthorization)
@@ -61,9 +62,9 @@ func (r Router) Router(router *gin.Engine) {
 	superAdminPathGroup.GET("/", r.adminReqHandler.GetAdmin)
 	superAdminPathGroup.PUT("/", r.adminReqHandler.ModifyAdmin)
 	superAdminPathGroup.DELETE("/", r.superAdminReqHandler.RemoveAdmin)
-	superAdminPathGroup.GET("/verified-admin", r.superAdminReqHandler.GetVerifiedAdmin)
-	superAdminPathGroup.GET("/active-admin", r.superAdminReqHandler.GetActiveAdmin)
-	superAdminPathGroup.PUT("/status-admin", r.superAdminReqHandler.ModifyAdminStatusById)
+	superAdminPathGroup.GET("/verified-admin", r.superAdminReqHandler.GetVerifiedAdmins)
+	superAdminPathGroup.GET("/active-admin", r.superAdminReqHandler.GetActiveAdmins)
+	superAdminPathGroup.PUT("/status-admin", r.superAdminReqHandler.ModifyStatusAdmin)
 	superAdminPathGroup.GET("/customers", r.adminReqHandler.GetAllCustomers)
 	superAdminPathGroup.GET("/admins", r.adminReqHandler.GetAllAdmins)
 
@@ -74,4 +75,13 @@ func (r Router) Router(router *gin.Engine) {
 	superAdminCustomerPathGroup.PUT("/", r.adminReqHandler.ModifyCustomer)
 	superAdminCustomerPathGroup.DELETE("/", r.adminReqHandler.RemoveCustomer)
 
+	var superAdminRegisterPath = "/super-admin/register"
+	var superAdminRegisterPathGroup = router.Group(superAdminRegisterPath, r.authReqHandler.CheckSuperAdminAuthorization)
+	superAdminRegisterPathGroup.POST("/", r.adminReqHandler.CreateRegisterAdmin)
+	superAdminRegisterPathGroup.GET("/", r.superAdminReqHandler.GetRegisterAdmin)
+	superAdminRegisterPathGroup.GET("/approved", r.superAdminReqHandler.GetApprovedAdmins)
+	superAdminRegisterPathGroup.GET("/rejected", r.superAdminReqHandler.GetRejectedAdmins)
+	superAdminRegisterPathGroup.GET("/pending", r.superAdminReqHandler.GetPendingAdmins)
+	superAdminRegisterPathGroup.PUT("/", r.superAdminReqHandler.ModifyRegisterAdmin)
+	superAdminRegisterPathGroup.DELETE("/", r.superAdminReqHandler.RemoveRegisterAdmin)
 }
