@@ -12,8 +12,8 @@ type UseCase struct {
 
 type UseCaseInterface interface {
 	GetCredentialByUsername(account *CredentialParam) (CredentialParam, error)
-	CreateActorSession(customer *ActorSession) error
-	GetLastActorSessionByToken(account *ActorSession) (ActorSession, error)
+	CreateActorSession(customer *ActorSessionParam) error
+	GetLastActorSessionByToken(account *ActorSessionParam) (ActorSessionParam, error)
 }
 
 func (uc UseCase) GetCredentialByUsername(account *CredentialParam) (CredentialParam, error) {
@@ -26,16 +26,16 @@ func (uc UseCase) GetCredentialByUsername(account *CredentialParam) (CredentialP
 	}, err
 }
 
-func (uc UseCase) GetLastActorSessionByToken(account *ActorSession) (ActorSession, error) {
+func (uc UseCase) GetLastActorSessionByToken(account *ActorSessionParam) (ActorSessionParam, error) {
 	var result, err = uc.authRepo.GetLastActorSessionByToken(&account.Token)
-	return ActorSession{
+	return ActorSessionParam{
 		Id:      result.Id,
 		ActorId: result.UserId,
 		Token:   result.Token,
 	}, err
 }
 
-func (uc UseCase) CreateActorSession(customer *ActorSession) error {
+func (uc UseCase) CreateActorSession(customer *ActorSessionParam) error {
 	var newSession *entities.ActorSession
 
 	newSession = &entities.ActorSession{
