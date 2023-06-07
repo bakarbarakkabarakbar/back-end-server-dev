@@ -1,0 +1,97 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:incoming request
+request handler;
+fork
+:GetCustomers
+request handler;
+    fork
+    :GetCustomerById
+    controller;
+        :GetCustomerById
+        usecase;
+    fork again
+    :GetCustomersByName
+    controller;
+        :GetCustomersByName
+        usecase;
+    fork again
+    :GetCustomersByEmail
+    controller;
+        :GetCustomersByEmail
+        usecase;
+    end fork
+fork again
+:GetAllCustomers
+request handler;
+    :GetAllCustomers
+    controller;
+        :GetAllCustomers
+        usecase;
+fork again
+:CreateCustomer
+request handler;
+    :CreateCustomer
+    controller;
+        :CreateCustomer
+        usecase;
+fork again
+:ModifyCustomer
+request handler;
+    :ModifyCustomer
+    controller;
+        :ModifyCustomer
+        usecase;
+fork again
+:RemoveCustomer
+request handler;
+    :RemoveCustomerById
+    controller;
+        :RemoveCustomerById
+        usecase;
+fork again
+:GetAdmin
+request handler;
+    fork
+    :GetAdminById
+    controller;
+        :GetAdminById
+        usecase;
+    fork again
+    :GetAdminsByUsername
+    controller;
+        :GetAdminsByUsername
+        usecase;
+    end fork
+fork again
+:GetAllAdmins
+request handler;
+    :GetAllAdmins
+    controller;
+        :GetAllAdmins
+        usecase;
+fork again
+:CreateAdmin
+request handler;
+    :CreateAdmin
+    controller;
+        :CreateAdmin
+        usecase;
+fork again
+:CreateRegisterAdmin
+request handler;
+    :CreateRegisterAdmin
+    controller;
+        :CreateRegisterAdmin
+        usecase;
+fork again
+:ModifyAdmin
+request handler;
+    :ModifyAdmin
+    controller;
+        :ModifyAdmin
+        usecase;
+end fork
+@enduml
