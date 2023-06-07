@@ -1,0 +1,599 @@
+@startuml
+namespace admin {
+    class ActorParam << (S,Aquamarine) >> {
+        + Id uint
+        + Username string
+        + RoleId uint
+        + IsVerified string
+        + IsActive string
+
+    }
+    class ActorParamWithPassword << (S,Aquamarine) >> {
+        + Id uint
+        + Username string
+        + Password string
+        + RoleId uint
+        + IsVerified string
+        + IsActive string
+
+    }
+    class Controller << (S,Aquamarine) >> {
+        - uc UseCaseInterface
+
+        + GetCustomerById(req *CustomerParam) (ResponseParam, error)
+        + GetCustomersByName(req *CustomerParam) (ResponseParam, error)
+        + GetCustomersByEmail(req *CustomerParam) (ResponseParam, error)
+        + GetAllCustomers(req *uint) (ResponseParam, error)
+        + CreateCustomer(req *CustomerParam) (ResponseParam, error)
+        + ModifyCustomer(req *CustomerParam) (ResponseParam, error)
+        + RemoveCustomerById(req *CustomerParam) (ResponseParam, error)
+        + GetAdminById(req *ActorParam) (ResponseParam, error)
+        + GetAdminsByUsername(req *ActorParam) (ResponseParam, error)
+        + GetAllAdmins(req *uint) (ResponseParam, error)
+        + CreateAdmin(req *ActorParamWithPassword) (ResponseParam, error)
+        + CreateRegisterAdmin(req *RegisterApprovalParam) (ResponseParam, error)
+        + ModifyAdmin(req *ActorParamWithPassword) (ResponseParam, error)
+
+    }
+    interface ControllerInterface  {
+        + GetCustomerById(req *CustomerParam) (ResponseParam, error)
+        + GetCustomersByName(req *CustomerParam) (ResponseParam, error)
+        + GetCustomersByEmail(req *CustomerParam) (ResponseParam, error)
+        + GetAllCustomers(req *uint) (ResponseParam, error)
+        + CreateCustomer(req *CustomerParam) (ResponseParam, error)
+        + ModifyCustomer(req *CustomerParam) (ResponseParam, error)
+        + RemoveCustomerById(req *CustomerParam) (ResponseParam, error)
+        + GetAdminById(req *ActorParam) (ResponseParam, error)
+        + GetAdminsByUsername(req *ActorParam) (ResponseParam, error)
+        + GetAllAdmins(req *uint) (ResponseParam, error)
+        + CreateAdmin(req *ActorParamWithPassword) (ResponseParam, error)
+        + CreateRegisterAdmin(req *RegisterApprovalParam) (ResponseParam, error)
+        + ModifyAdmin(req *ActorParamWithPassword) (ResponseParam, error)
+
+    }
+    class CustomerParam << (S,Aquamarine) >> {
+        + Id uint
+        + FirstName string
+        + LastName string
+        + Email string
+        + Avatar string
+
+    }
+    class RegisterApprovalParam << (S,Aquamarine) >> {
+        + Id uint
+        + AdminId uint
+        + SuperAdminId uint
+        + Status string
+
+    }
+    class RequestHandler << (S,Aquamarine) >> {
+        - ctrl ControllerInterface
+
+        + GetCustomers(c *gin.Context)
+        + GetAllCustomers(c *gin.Context)
+        + CreateCustomer(c *gin.Context)
+        + ModifyCustomer(c *gin.Context)
+        + RemoveCustomer(c *gin.Context)
+        + GetAdmin(c *gin.Context)
+        + GetAllAdmins(c *gin.Context)
+        + CreateAdmin(c *gin.Context)
+        + CreateRegisterAdmin(c *gin.Context)
+        + ModifyAdmin(c *gin.Context)
+
+    }
+    interface RequestHandlerInterface  {
+        + GetCustomers(c *gin.Context)
+        + GetAllCustomers(c *gin.Context)
+        + CreateCustomer(c *gin.Context)
+        + ModifyCustomer(c *gin.Context)
+        + RemoveCustomer(c *gin.Context)
+        + GetAdmin(c *gin.Context)
+        + GetAllAdmins(c *gin.Context)
+        + CreateAdmin(c *gin.Context)
+        + CreateRegisterAdmin(c *gin.Context)
+        + ModifyAdmin(c *gin.Context)
+
+    }
+    class ResponseParam << (S,Aquamarine) >> {
+        + Data any
+
+    }
+    class UseCase << (S,Aquamarine) >> {
+        - adminRepo repositories.AdminRepoInterface
+        - customerRepo repositories.CustomerRepoInterface
+
+        + GetCustomerById(customer *CustomerParam) (CustomerParam, error)
+        + GetCustomersByName(customer *CustomerParam) ([]CustomerParam, error)
+        + GetCustomersByEmail(customer *CustomerParam) ([]CustomerParam, error)
+        + GetAllCustomers(page *uint) ([]CustomerParam, error)
+        + CreateCustomer(customer *CustomerParam) error
+        + ModifyCustomer(customer *CustomerParam) error
+        + RemoveCustomerById(customer *CustomerParam) (CustomerParam, error)
+        + GetAdminById(admin *ActorParam) (ActorParam, error)
+        + GetAdminsByUsername(admin *ActorParam) ([]ActorParam, error)
+        + GetAllAdmins(page *uint) ([]ActorParam, error)
+        + CreateAdmin(admin *ActorParamWithPassword) error
+        + CreateRegisterAdmin(admin *RegisterApprovalParam) error
+        + ModifyAdmin(admin *ActorParamWithPassword) error
+
+    }
+    interface UseCaseInterface  {
+        + GetCustomerById(customer *CustomerParam) (CustomerParam, error)
+        + GetCustomersByName(customer *CustomerParam) ([]CustomerParam, error)
+        + GetCustomersByEmail(customer *CustomerParam) ([]CustomerParam, error)
+        + GetAllCustomers(page *uint) ([]CustomerParam, error)
+        + CreateCustomer(customer *CustomerParam) error
+        + ModifyCustomer(customer *CustomerParam) error
+        + RemoveCustomerById(customer *CustomerParam) (CustomerParam, error)
+        + GetAdminById(admin *ActorParam) (ActorParam, error)
+        + GetAdminsByUsername(admin *ActorParam) ([]ActorParam, error)
+        + GetAllAdmins(page *uint) ([]ActorParam, error)
+        + CreateAdmin(admin *ActorParamWithPassword) error
+        + CreateRegisterAdmin(admin *RegisterApprovalParam) error
+        + ModifyAdmin(admin *ActorParamWithPassword) error
+
+    }
+}
+"dto.ResponseMeta" *-- "admin.ResponseParam"
+
+"admin.ControllerInterface" <|-- "admin.Controller"
+"admin.RequestHandlerInterface" <|-- "admin.RequestHandler"
+"admin.UseCaseInterface" <|-- "admin.UseCase"
+
+namespace auth {
+    class ActorSessionParam << (S,Aquamarine) >> {
+        + Id uint
+        + ActorId uint
+        + Token string
+
+    }
+    class Controller << (S,Aquamarine) >> {
+        - uc UseCaseInterface
+
+        + CheckAccountCredential(req *CredentialParam) (ResponseParam, error)
+        + GetLastActorSessionByToken(req *ActorSessionParam) (ResponseParam, error)
+        + CreateActorSession(req *ActorSessionParam) (ResponseParam, error)
+
+    }
+    interface ControllerInterface  {
+        + CheckAccountCredential(req *CredentialParam) (ResponseParam, error)
+        + GetLastActorSessionByToken(req *ActorSessionParam) (ResponseParam, error)
+        + CreateActorSession(req *ActorSessionParam) (ResponseParam, error)
+
+    }
+    class CredentialParam << (S,Aquamarine) >> {
+        - id uint
+        - username string
+        - password string
+        - roleId uint
+
+    }
+    class Header << (S,Aquamarine) >> {
+        + Bearer string
+
+    }
+    class RequestHandler << (S,Aquamarine) >> {
+        - ctrl ControllerInterface
+
+        + CheckSuperAdminAuthorization(c *gin.Context)
+        + CheckAdminAuthorization(c *gin.Context)
+        + CreateAuthorization(c *gin.Context)
+
+    }
+    interface RequestHandlerInterface  {
+        + CheckSuperAdminAuthorization(c *gin.Context)
+        + CheckAdminAuthorization(c *gin.Context)
+        + CreateAuthorization(c *gin.Context)
+
+    }
+    class ResponseParam << (S,Aquamarine) >> {
+        + Data any
+
+    }
+    class UseCase << (S,Aquamarine) >> {
+        - authRepo repositories.AuthRepo
+
+        + GetCredentialByUsername(account *CredentialParam) (CredentialParam, error)
+        + GetLastActorSessionByToken(account *ActorSessionParam) (ActorSessionParam, error)
+        + CreateActorSession(customer *ActorSessionParam) error
+
+    }
+    interface UseCaseInterface  {
+        + GetCredentialByUsername(account *CredentialParam) (CredentialParam, error)
+        + CreateActorSession(customer *ActorSessionParam) error
+        + GetLastActorSessionByToken(account *ActorSessionParam) (ActorSessionParam, error)
+
+    }
+}
+"dto.ResponseMeta" *-- "auth.ResponseParam"
+
+"auth.ControllerInterface" <|-- "auth.Controller"
+"auth.RequestHandlerInterface" <|-- "auth.RequestHandler"
+"auth.UseCaseInterface" <|-- "auth.UseCase"
+
+namespace customers {
+    class Controller << (S,Aquamarine) >> {
+        - uc UseCaseInterface
+
+        + GetCustomerById(req *CustomerParam) (ResponseParam, error)
+        + GetCustomerByEmail(req *CustomerParam) (ResponseParam, error)
+
+    }
+    interface ControllerInterface  {
+        + GetCustomerById(req *CustomerParam) (ResponseParam, error)
+        + GetCustomerByEmail(req *CustomerParam) (ResponseParam, error)
+
+    }
+    class CustomerParam << (S,Aquamarine) >> {
+        + Id uint
+        + FirstName string
+        + LastName string
+        + Email string
+        + Avatar string
+
+    }
+    class RequestHandler << (S,Aquamarine) >> {
+        - ctrl ControllerInterface
+
+        + GetCustomer(c *gin.Context)
+
+    }
+    interface RequestHandlerInterface  {
+        + GetCustomer(c *gin.Context)
+
+    }
+    class ResponseParam << (S,Aquamarine) >> {
+        + Data any
+
+    }
+    class UseCase << (S,Aquamarine) >> {
+        - customerRepo repositories.CustomerRepoInterface
+
+        + GetCustomerById(customer *CustomerParam) (CustomerParam, error)
+        + GetCustomerByEmail(customer *CustomerParam) (CustomerParam, error)
+
+    }
+    interface UseCaseInterface  {
+        + GetCustomerById(customer *CustomerParam) (CustomerParam, error)
+        + GetCustomerByEmail(customer *CustomerParam) (CustomerParam, error)
+
+    }
+}
+"dto.ResponseMeta" *-- "customers.ResponseParam"
+
+"customers.ControllerInterface" <|-- "customers.Controller"
+"customers.RequestHandlerInterface" <|-- "customers.RequestHandler"
+"customers.UseCaseInterface" <|-- "customers.UseCase"
+
+namespace data_api {
+    class CustomerParam << (S,Aquamarine) >> {
+        + Id uint
+        + FirstName string
+        + LastName string
+        + Email string
+        + Avatar string
+
+    }
+    class CustomersParam << (S,Aquamarine) >> {
+        + Data []CustomerParam
+
+    }
+    class ResponseParam << (S,Aquamarine) >> {
+        + Page int
+        + PerPage int
+        + Total int
+        + TotalPages int
+        + Data []CustomerParam
+
+    }
+}
+
+
+namespace dto {
+    class ErrorResponse << (S,Aquamarine) >> {
+        + Data any
+        + Errors any
+
+    }
+    class Request << (S,Aquamarine) >> {
+        + Path string
+        + Method string
+        + Body <font color=blue>map</font>[string]string
+        + Header <font color=blue>map</font>[string]string
+
+    }
+    class Response << (S,Aquamarine) >> {
+        + Code int
+        + Message string
+        + Data any
+
+    }
+    class ResponseMeta << (S,Aquamarine) >> {
+        + Success bool
+        + MessageTitle string
+        + Message string
+        + ResponseTime string
+
+    }
+}
+"dto.ResponseMeta" *-- "dto.ErrorResponse"
+
+
+namespace entities {
+    class Actor << (S,Aquamarine) >> {
+        + Id uint
+        + Username string
+        + Password string
+        + RoleId uint
+        + IsVerified string
+        + IsActive string
+        + CreatedAt time.Time
+        + ModifiedAt time.Time
+
+    }
+    class ActorRole << (S,Aquamarine) >> {
+        + Id uint
+        + RoleName string
+
+    }
+    class ActorSession << (S,Aquamarine) >> {
+        + Id uint
+        + UserId uint
+        + Token string
+        + CreatedAt time.Time
+        + ExpiresAt time.Time
+
+    }
+    class Auth << (S,Aquamarine) >> {
+        - password string
+
+        + Id uint
+
+    }
+    class Customer << (S,Aquamarine) >> {
+        + Id uint
+        + FirstName string
+        + LastName string
+        + Email string
+        + Avatar string
+        + CreatedAt time.Time
+        + ModifiedAt time.Time
+
+    }
+    class RegisterApproval << (S,Aquamarine) >> {
+        + Id uint
+        + AdminId uint
+        + SuperAdminId uint
+        + Status string
+
+    }
+}
+
+
+namespace jwt {
+    class AuthHeader << (S,Aquamarine) >> {
+        + Bearer string
+
+    }
+    class CredentialParam << (S,Aquamarine) >> {
+        + Username string
+        + Password string
+        + RoleId uint
+
+    }
+}
+
+
+namespace repositories {
+    class AdminRepo << (S,Aquamarine) >> {
+        - db *gorm.DB
+
+        + GetCustomersByName(name *string) ([]entities.Customer, error)
+        + GetCustomersByEmail(email *string) ([]entities.Customer, error)
+        + GetAllCustomers(page *uint) ([]entities.Customer, error)
+        + CreateCustomer(customer *entities.Customer) error
+        + ModifyCustomer(customer *entities.Customer) error
+        + RemoveCustomerById(id *uint) error
+        + GetAdminById(id *uint) (entities.Actor, error)
+        + GetAdminsByUsername(username *string) ([]entities.Actor, error)
+        + GetAllAdmins(page *uint) ([]entities.Actor, error)
+        + CreateAdmin(admin *entities.Actor) error
+        + CreateRegisterAdmin(register *entities.RegisterApproval) error
+        + ModifyAdmin(admin *entities.Actor) error
+
+    }
+    interface AdminRepoInterface  {
+        + GetCustomersByName(name *string) ([]entities.Customer, error)
+        + GetCustomersByEmail(email *string) ([]entities.Customer, error)
+        + GetAllCustomers(page *uint) ([]entities.Customer, error)
+        + CreateCustomer(customer *entities.Customer) error
+        + ModifyCustomer(customer *entities.Customer) error
+        + RemoveCustomerById(id *uint) error
+        + GetAdminById(id *uint) (entities.Actor, error)
+        + GetAdminsByUsername(username *string) ([]entities.Actor, error)
+        + GetAllAdmins(page *uint) ([]entities.Actor, error)
+        + CreateAdmin(admin *entities.Actor) error
+        + CreateRegisterAdmin(register *entities.RegisterApproval) error
+        + ModifyAdmin(admin *entities.Actor) error
+
+    }
+    class AuthRepo << (S,Aquamarine) >> {
+        - db *gorm.DB
+
+        + GetActorByUsername(username *string) (entities.Actor, error)
+        + GetLastActorSessionByToken(token *string) (entities.ActorSession, error)
+        + CreateActorSession(session *entities.ActorSession) error
+
+    }
+    class CustomerRepo << (S,Aquamarine) >> {
+        - db *gorm.DB
+
+        + GetCustomerById(id *uint) (entities.Customer, error)
+        + GetCustomerByEmail(email *string) (entities.Customer, error)
+
+    }
+    interface CustomerRepoInterface  {
+        + GetCustomerById(id *uint) (entities.Customer, error)
+        + GetCustomerByEmail(email *string) (entities.Customer, error)
+
+    }
+    class SuperAdminRepo << (S,Aquamarine) >> {
+        - db *gorm.DB
+
+        + GetVerifiedAdmins() ([]entities.Actor, error)
+        + GetActiveAdmins() ([]entities.Actor, error)
+        + GetRegisterAdminById(id *uint) (entities.RegisterApproval, error)
+        + GetApprovedAdmins() ([]entities.RegisterApproval, error)
+        + GetRejectedAdmins() ([]entities.RegisterApproval, error)
+        + GetPendingAdmins() ([]entities.RegisterApproval, error)
+        + GetRegisterRequestAdmins() ([]entities.RegisterApproval, error)
+        + ModifyRegisterAdminById(adminRegister *entities.RegisterApproval) error
+        + RemoveAdminById(id *uint) error
+        + RemoveRegisterAdminById(id *uint) error
+
+    }
+    interface SuperAdminRepoInterface  {
+        + GetVerifiedAdmins() ([]entities.Actor, error)
+        + GetActiveAdmins() ([]entities.Actor, error)
+        + GetRegisterAdminById(id *uint) (entities.RegisterApproval, error)
+        + GetApprovedAdmins() ([]entities.RegisterApproval, error)
+        + GetRejectedAdmins() ([]entities.RegisterApproval, error)
+        + GetPendingAdmins() ([]entities.RegisterApproval, error)
+        + GetRegisterRequestAdmins() ([]entities.RegisterApproval, error)
+        + ModifyRegisterAdminById(adminRegister *entities.RegisterApproval) error
+        + RemoveAdminById(id *uint) error
+        + RemoveRegisterAdminById(id *uint) error
+
+    }
+}
+
+"repositories.AdminRepoInterface" <|-- "repositories.AdminRepo"
+"repositories.CustomerRepoInterface" <|-- "repositories.CustomerRepo"
+"repositories.SuperAdminRepoInterface" <|-- "repositories.SuperAdminRepo"
+
+namespace router {
+    class Router << (S,Aquamarine) >> {
+        - customerReqHandler customers.RequestHandlerInterface
+        - adminReqHandler admin.RequestHandlerInterface
+        - authReqHandler auth.RequestHandlerInterface
+        - superAdminReqHandler super-admin.RequestHandlerInterface
+
+        + Router(router *gin.Engine)
+
+    }
+}
+
+
+namespace super_admin {
+    class ActorParam << (S,Aquamarine) >> {
+        + Id uint
+        + Username string
+        + RoleId uint
+        + IsVerified string
+        + IsActive string
+
+    }
+    class Controller << (S,Aquamarine) >> {
+        - uc UseCaseInterface
+
+        + GetVerifiedAdmins() (ResponseParam, error)
+        + GetActiveAdmins() (ResponseParam, error)
+        + GetRegisterAdminById(req *RegisterApprovalParam) (ResponseParam, error)
+        + GetApprovedAdmins() (ResponseParam, error)
+        + GetRejectedAdmins() (ResponseParam, error)
+        + GetPendingAdmins() (ResponseParam, error)
+        + ModifyStatusAdminById(req *ActorParam) (ResponseParam, error)
+        + ModifyRegisterAdminById(req *RegisterApprovalParam) (ResponseParam, error)
+        + RemoveAdminById(req *ActorParam) (ResponseParam, error)
+        + RemoveRegisterAdminById(req *RegisterApprovalParam) (ResponseParam, error)
+
+    }
+    interface ControllerInterface  {
+        + GetVerifiedAdmins() (ResponseParam, error)
+        + GetActiveAdmins() (ResponseParam, error)
+        + GetRegisterAdminById(req *RegisterApprovalParam) (ResponseParam, error)
+        + GetApprovedAdmins() (ResponseParam, error)
+        + GetRejectedAdmins() (ResponseParam, error)
+        + GetPendingAdmins() (ResponseParam, error)
+        + ModifyStatusAdminById(req *ActorParam) (ResponseParam, error)
+        + ModifyRegisterAdminById(req *RegisterApprovalParam) (ResponseParam, error)
+        + RemoveAdminById(req *ActorParam) (ResponseParam, error)
+        + RemoveRegisterAdminById(req *RegisterApprovalParam) (ResponseParam, error)
+
+    }
+    class RegisterApprovalParam << (S,Aquamarine) >> {
+        + Id uint
+        + AdminId uint
+        + SuperAdminId uint
+        + Status string
+
+    }
+    class RequestHandler << (S,Aquamarine) >> {
+        - ctrl ControllerInterface
+
+        + GetVerifiedAdmins(c *gin.Context)
+        + GetActiveAdmins(c *gin.Context)
+        + GetRegisterAdmin(c *gin.Context)
+        + GetApprovedAdmins(c *gin.Context)
+        + GetRejectedAdmins(c *gin.Context)
+        + GetPendingAdmins(c *gin.Context)
+        + ModifyStatusAdmin(c *gin.Context)
+        + ModifyRegisterAdminById(c *gin.Context)
+        + RemoveAdmin(c *gin.Context)
+        + RemoveRegisterAdmin(c *gin.Context)
+
+    }
+    interface RequestHandlerInterface  {
+        + GetVerifiedAdmins(c *gin.Context)
+        + GetActiveAdmins(c *gin.Context)
+        + GetRegisterAdmin(c *gin.Context)
+        + GetApprovedAdmins(c *gin.Context)
+        + GetRejectedAdmins(c *gin.Context)
+        + GetPendingAdmins(c *gin.Context)
+        + ModifyStatusAdmin(c *gin.Context)
+        + ModifyRegisterAdminById(c *gin.Context)
+        + RemoveAdmin(c *gin.Context)
+        + RemoveRegisterAdmin(c *gin.Context)
+
+    }
+    class ResponseParam << (S,Aquamarine) >> {
+        + Data any
+
+    }
+    class UseCase << (S,Aquamarine) >> {
+        - superAdminRepo repositories.SuperAdminRepoInterface
+        - adminRepo repositories.AdminRepoInterface
+
+        + GetVerifiedAdmins() ([]ActorParam, error)
+        + GetActiveAdmins() ([]ActorParam, error)
+        + GetRegisterAdminById(register *RegisterApprovalParam) (RegisterApprovalParam, error)
+        + GetApprovedAdmins() ([]RegisterApprovalParam, error)
+        + GetRejectedAdmin() ([]RegisterApprovalParam, error)
+        + GetPendingAdmins() ([]RegisterApprovalParam, error)
+        + ModifyStatusAdminById(actor *ActorParam) error
+        + ModifyRegisterAdminById(register *RegisterApprovalParam) error
+        + RemoveAdminById(admin *ActorParam) (ActorParam, error)
+        + RemoveRegisterAdminById(register *RegisterApprovalParam) (RegisterApprovalParam, error)
+
+    }
+    interface UseCaseInterface  {
+        + GetVerifiedAdmins() ([]ActorParam, error)
+        + GetActiveAdmins() ([]ActorParam, error)
+        + GetRegisterAdminById(register *RegisterApprovalParam) (RegisterApprovalParam, error)
+        + GetApprovedAdmins() ([]RegisterApprovalParam, error)
+        + GetRejectedAdmin() ([]RegisterApprovalParam, error)
+        + GetPendingAdmins() ([]RegisterApprovalParam, error)
+        + ModifyStatusAdminById(actor *ActorParam) error
+        + ModifyRegisterAdminById(register *RegisterApprovalParam) error
+        + RemoveAdminById(admin *ActorParam) (ActorParam, error)
+        + RemoveRegisterAdminById(register *RegisterApprovalParam) (RegisterApprovalParam, error)
+
+    }
+}
+"dto.ResponseMeta" *-- "super_admin.ResponseParam"
+
+"super_admin.ControllerInterface" <|-- "super_admin.Controller"
+"super_admin.RequestHandlerInterface" <|-- "super_admin.RequestHandler"
+"super_admin.UseCaseInterface" <|-- "super_admin.UseCase"
+
+@enduml
