@@ -10,8 +10,10 @@ the Postman Workspace after getting authorized
 2. Get the super admin JWT Bearer token by sending basic auth 
 using provided request. This request should return JWT token 
 in the "Authorization" header. Super admin credential mentioned below.
+```
 Id = "super-admin"
 Password = "STRONG.password79"
+```
 3. Parse the JWT Bearer token via this [link](https://jwt.io/#debugger-io) and copy the header
 and payload to folder "Auth Needed/Super Admin". 
 - Algorithm HS256
@@ -26,8 +28,29 @@ inherit the auth configuration from "Super Admin" Folder
 repeating these process.
 
 ## Unsolved Algorithm
-1. How to control authorization of admin that does not yet approved 
+1. Control authorization of admin that does not yet approved 
 or active by admin.
+2. Delete data from register approval when super admin delete 
+actor data.
+3. Flexible customer search based on the key given to 
+the API. 
+4. Parsing JWT Token with default prefix, current workaround is 
+using an empty header
+5. Relation between validation on table actors with
+table registry approval. It should have mysql stored procedure
+that can be automatically change the value of validation based on 
+parameter on registry approval. 
+6. Relation on activation on table actors, it should have some kind
+of activity detection to determine, if this actor is still accessing 
+the API.
+7. Connection to External API when fetching customer data to mysql 
+databases. There is noticeable performance impact regarding this import process, 
+and it should be changed into scheduler or cronjob instead of each of API
+hit.
+8. Hardcoded env variables, dsn, secret-key, external API url
+9. No docs for swagger API, if you want to support with swagger account, I could not
+be any happier :)
+
 Feel free to contact me via issue or hit me via akbar.muhammadakbarmaulana@gmail.com
 
 ## Setup
@@ -147,7 +170,7 @@ INSERT INTO actors(`id`,`username`, `password`, `role_id`, `is_verified`, `is_ac
 
 ---
 
-## Coach Appointment Tech Spec
+## User Management Tech Spec
 
 This README would normally document whatever steps are 
 necessary to get your application up and running.
@@ -185,14 +208,14 @@ parameter (search by username ) and pagination
 ### Further Behavior ###
 1. Every time the admin gets a list of customers, service gets 
 data from [link](https://reqres.in/api/users?page=2) and saves into 
-2. the db if data does not exist.
+the db if data does not exist.
 2. Slow query is expected due to point no 1
 3. For recreational purposes, this design implement EC2 AWS 
 Instances, please aware that this server is not performance oriented
 4. Due to EC2 Geographical Location, some of the internet provider 
 is blocking connection/port to the EC2 AWS Instances, please aware 
 that your internet is capable connecting to the instances.
-5. BRIvolution Wi-Fi Connection is not able to reach EC2 AWS Instances, 
+5. Some of public Wi-Fi Connection is not able to reach EC2 AWS Instances, 
 consider looking for other internet provider
 
 ### Architecture and Design ###
