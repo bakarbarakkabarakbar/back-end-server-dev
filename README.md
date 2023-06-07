@@ -16,16 +16,22 @@ Password = "STRONG.password79"
 ```
 3. Parse the JWT Bearer token via this [link](https://jwt.io/#debugger-io) and copy the header
 and payload to folder "Auth Needed/Super Admin". 
+```
 - Algorithm HS256
-- Secret = secret-key-super-admin
+- Secret for super admin = secret-key-super-admin 
 - Payload = Copied from parsing in link above
 Advance Configuration
 - Request header prefix = leave blank
 - JWT header = Copied from parsing in link above
+```
 4. You can access the request inside the folder since the request 
 inherit the auth configuration from "Super Admin" Folder
 5. You can create new admin and login with that credential with
 repeating these process.
+```
+- Secret for admin = secret-key-admin
+- Secret for customer = secret-key-customer
+```
 
 ## Unsolved Algorithm
 1. Control authorization of admin that does not yet approved 
