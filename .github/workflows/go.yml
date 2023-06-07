@@ -22,6 +22,7 @@ jobs:
       with:
         fetch-depth: 1
         path: ${{ env.GOPATH }}/src/myproject
+        ref: main
 
     - name: Set up Go
       uses: actions/setup-go@v4
