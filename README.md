@@ -1,7 +1,35 @@
 # README #
 
 ## API Contract
-find the api documentation at the following postman [link](https://lunar-firefly-676833.postman.co/workspace/Bootcamp~d5198276-f65f-4967-8870-3b05048d857c/collection/12975315-49435fb3-6b29-4465-9fad-aaa3a47678c5?action=share&creator=12975315)
+Kindly find the api documentation at the following 
+postman [link](https://lunar-firefly-676833.postman.co/workspace/Bootcamp~d5198276-f65f-4967-8870-3b05048d857c/collection/12975315-49435fb3-6b29-4465-9fad-aaa3a47678c5?action=share&creator=12975315)
+
+## How to Use API 
+1. Open the link mentioned above, this should open 
+the Postman Workspace after getting authorized 
+2. Get the super admin JWT Bearer token by sending basic auth 
+using provided request. This request should return JWT token 
+in the "Authorization" header. Super admin credential mentioned below.
+Id = "super-admin"
+Password = "STRONG.password79"
+3. Parse the JWT Bearer token via this [link](https://jwt.io/#debugger-io) and copy the header
+and payload to folder "Auth Needed/Super Admin". 
+- Algorithm HS256
+- Secret = secret-key-super-admin
+- Payload = Copied from parsing in link above
+Advance Configuration
+- Request header prefix = leave blank
+- JWT header = Copied from parsing in link above
+4. You can access the request inside the folder since the request 
+inherit the auth configuration from "Super Admin" Folder
+5. You can create new admin and login with that credential with
+repeating these process.
+
+## Unsolved Algorithm
+1. How to control authorization of admin that does not yet approved 
+or active by admin.
+Feel free to contact me via issue or hit me via akbar.muhammadakbarmaulana@gmail.com
+
 ## Setup
 
 1. Install Go version 1.20.4
