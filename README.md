@@ -17,6 +17,10 @@ go get -u gorm.io/gorm
 ```shell
 go get -u gorm.io/driver/mysql
 ```
+4. Install JWT
+```shell
+go get -u github.com/golang-jwt/jwt/v5
+```
 
 ## Run
 
@@ -186,56 +190,33 @@ use case and returns the response to the client.
 the incoming HTTP requests and passing them on to 
 the controller layer.
 
-### Service State Diagram ###
-this diagram will explain the state of appointment through 
-th every process at system to achieve the output state.
+### Class State Diagram ###
+this diagram will explain the relation in the class, available
+interface, and connection between architecture and design
 
-![state diagram](https://gitlab.com/Nacute/fita-be-test/-/raw/main/_diagrams/main_state.png)
+![class diagram](https://github.com/bakarbarakkabarakbar/back-end-server-dev/blob/6bc209b5dc2a6aa806a3491df071946ab696d60d/_diagram/class_diagram_backend.png)
 
-As explain at state diagram. there are 3 action could be performed
-within the system which are create appointment, approval of appointment,
-and reschedule appointment. So to cover the business logic of each
-action. there i provide the activity diagram for them.
+There are three main endpoint that could be used in the API
+1. Customer, this endpoint serve about the customer data by limited key value
+2. Admin, this endpoint serve the user data management
+3. Super Admin, this endpoint serve ultimate admin and user data management
 
-### Create Appointment Activity Diagram ###
-The `create appointment` action is the entry point of this system. 
-where user create the appointment request, and before the appointment 
-create there are several requirment to pass which are:
-1. appointment schedule should match the schedule of coach.
-2. appointment schedule should not intercept with another user
-appointment date with status booked, waiting for coach approval, 
-or waiting reschedule approval from user.
+### Customer Available Endpoint ###
 
-Here is the complete diagram for this endpoint.
+![customer available endpoint](https://github.com/bakarbarakkabarakbar/back-end-server-dev/blob/1b238d2c409a4636746cf6d31a791ced45942915/_diagram/customer/activity.png)
 
-![create appointment activity](https://gitlab.com/Nacute/fita-be-test/-/raw/main/_diagrams/create-appointment/activity.png)
+### Admin Available Endpoint ###
 
-### Approval Of Appointment Activity Diagram ###
-The `approval of appointment` action is used to approve any appointment
-that on state of rescheduling and waiting for coach approval. at this
-action, appointment could be rejected and approved. and before reschedule
-the appointment, the schedule should fulfill the requirement same as
-`create appointment` endpoint.
+![admin available endpoint](https://github.com/bakarbarakkabarakbar/back-end-server-dev/blob/1b238d2c409a4636746cf6d31a791ced45942915/_diagram/admin/activity.png)
 
-Here is the complete diagram for this endpoint.
+###  Super Admin Available Endpoint ###
 
-![approval of appointment activity](https://gitlab.com/Nacute/fita-be-test/-/raw/main/_diagrams/approval-appointment/activity.png)
+![super admin available endpoint](https://github.com/bakarbarakkabarakbar/back-end-server-dev/blob/1b238d2c409a4636746cf6d31a791ced45942915/_diagram/super-admin/activity.png)
 
-###  Reschedule Appointment Activity Diagram ###
-The `reschedule appointment` action is used by coach to propose a new
-schedule to customer. 
+###  Table Diagram ###
+there are 5 table that dedicated on services which are `actors`
+`actor_roles`, `customers`, `actor_sessions` and `register_approvals`. For
+complete of database structure you can check image below.
 
-Here is the complete diagram for this endpoint.
+![tables diagram](https://github.com/bakarbarakkabarakbar/back-end-server-dev/blob/1b238d2c409a4636746cf6d31a791ced45942915/_sql/mysql-tables.png)
 
-![reschedule appointment activity](https://gitlab.com/Nacute/fita-be-test/-/raw/main/_diagrams/reschedule-appointment/activity.png)
-
-###  Data Flow Diagram ###
-there are 5 table that dedicated on this services which are `main_users`
-`main_roles`, `appointments`, `time_zone_name` and `schedules`. For
-complete explaination of database structure you can follow this ddf.
-
-
-![data flow diagram](https://gitlab.com/Nacute/fita-be-test/-/raw/main/_diagrams/dfd.finish.png)
-
-
-![data flow diagram](https://gitlab.com/Nacute/fita-be-test/-/blob/main/_diagrams/dfd.finish.png)
