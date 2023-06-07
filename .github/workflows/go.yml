@@ -8,13 +8,20 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
 jobs:
-
   build:
     runs-on: ubuntu-latest
+    env:
+      GOPATH: ${{ github.workspace }}
+      GOBIN: ${{ github.workspace }}/bin
+    defaults:
+      run:
+        working-directory: ${{ env.GOPATH }}/src/myproject
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        path: ${{ env.GOPATH }}/src/myproject
 
     - name: Set up Go
       uses: actions/setup-go@v4
@@ -27,6 +34,8 @@ jobs:
         go get -u github.com/gin-gonic/gin
         go get -u gorm.io/gorm
         go get -u gorm.io/driver/mysql
+      env:
+        GOPATH: /home/runner/work/woodpecker/go
 
     - name: Build
       run: go build -v ./...
