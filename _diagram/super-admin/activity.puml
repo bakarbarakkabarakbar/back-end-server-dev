@@ -1,0 +1,100 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:Super Admin
+Available request handler;
+fork
+:GetVerifiedAdmins
+request handler;
+    :GetVerifiedAdmins
+    controller;
+        :GetVerifiedAdmins
+        usecase;
+            :GetVerifiedAdmins
+            repository;
+fork again
+:GetActiveAdmins
+request handler;
+    :GetActiveAdmins
+    controller;
+        :GetActiveAdmins
+        usecase;
+            :GetActiveAdmins
+            repository;
+fork again
+:GetRegisterAdmin
+request handler;
+    :GetRegisterAdminById
+    controller;
+        :GetRegisterAdminById
+        usecase;
+            :GetRegisterAdminById
+            repository;
+fork again
+:GetApprovedAdmins
+request handler;
+    :GetApprovedAdmins
+    controller;
+        :GetApprovedAdmins
+        usecase;
+            :GetApprovedAdmins
+            repository;
+fork again
+:GetRejectedAdmins
+request handler;
+    :GetRejectedAdmins
+    controller;
+        :GetRejectedAdmins
+        usecase;
+            :GetRejectedAdmins
+            repository;
+fork again
+:GetPendingAdmins
+request handler;
+    :GetPendingAdmins
+    controller;
+        :GetPendingAdmins
+        usecase;
+            :GetPendingAdmins
+            repository;
+
+fork again
+:ModifyStatusAdmin
+request handler;
+    :ModifyStatusAdminById
+    controller;
+        :ModifyStatusAdminById
+        usecase;
+            :ModifyStatusAdminById
+            repository;
+fork again
+:ModifyRegisterAdmin
+request handler;
+    :ModifyRegisterAdminById
+    controller;
+        :ModifyRegisterAdminById
+        usecase;
+            :ModifyRegisterAdminById
+            repository;
+fork again
+:RemoveAdmin
+request handler;
+    :RemoveAdminById
+    controller;
+        :RemoveAdminById
+        usecase;
+            :RemoveAdminById
+            repository;
+fork again
+:RemoveRegisterAdmin
+request handler;
+    :RemoveRegisterAdminById
+    controller;
+        :RemoveRegisterAdminById
+        usecase;
+            :RemoveRegisterAdminById
+            repository;
+end fork
+@enduml
+
