@@ -177,7 +177,7 @@ func (uc UseCase) ModifyRegisterAdminById(register *RegisterApprovalParam) error
 		SuperAdminId: result.SuperAdminId,
 		Status:       register.Status,
 	}
-	err = uc.superAdminRepo.ModifyAdminApproval(newAdmin)
+	err = uc.superAdminRepo.ModifyRegisterAdminById(newAdmin)
 	return err
 }
 

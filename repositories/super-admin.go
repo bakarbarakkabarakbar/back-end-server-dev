@@ -23,7 +23,7 @@ type SuperAdminRepoInterface interface {
 	GetRejectedAdmins() ([]entities.RegisterApproval, error)
 	GetPendingAdmins() ([]entities.RegisterApproval, error)
 	GetRegisterRequestAdmins() ([]entities.RegisterApproval, error)
-	ModifyAdminApproval(adminRegister *entities.RegisterApproval) error
+	ModifyRegisterAdminById(adminRegister *entities.RegisterApproval) error
 	RemoveAdminById(id *uint) error
 	RemoveRegisterAdminById(id *uint) error
 }
@@ -91,7 +91,7 @@ func (sar SuperAdminRepo) GetRegisterRequestAdmins() ([]entities.RegisterApprova
 	return result, nil
 }
 
-func (sar SuperAdminRepo) ModifyAdminApproval(adminRegister *entities.RegisterApproval) error {
+func (sar SuperAdminRepo) ModifyRegisterAdminById(adminRegister *entities.RegisterApproval) error {
 	err := sar.db.Save(&adminRegister).Error
 	return err
 }
