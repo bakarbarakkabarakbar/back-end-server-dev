@@ -33,7 +33,7 @@ repeating these process.
 - Secret for customer = secret-key-customer
 ```
 
-## Unsolved Algorithm
+## Unsolved Issue/Algorithm/Improvement
 1. Control authorization of admin that does not yet approved 
 or active by admin.
 2. Delete data from register approval when super admin delete 
@@ -56,6 +56,11 @@ hit.
 8. Hardcoded env variables, dsn, secret-key, external API url
 9. No docs for swagger API, if you want to support with swagger account, I could not
 be any happier :)
+10. Response with new JWT token when Authorized API hit
+11. Isolate customer/actor data by their credentials
+12. Timed/Flexible secret key generator for each role
+13. Auto fetch JWT token in Postman using global variable
+14. Memory optimization by using pointer
 
 Feel free to contact me via issue or hit me via akbar.muhammadakbarmaulana@gmail.com
 
