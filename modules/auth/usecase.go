@@ -7,7 +7,7 @@ import (
 )
 
 type UseCase struct {
-	authRepo repositories.AuthRepo
+	authRepo repositories.AuthRepoInterface
 }
 
 type UseCaseInterface interface {
@@ -18,6 +18,9 @@ type UseCaseInterface interface {
 
 func (uc UseCase) GetCredentialByUsername(account *CredentialParam) (CredentialParam, error) {
 	var result, err = uc.authRepo.GetActorByUsername(&account.username)
+	if err != nil {
+		return CredentialParam{}, err
+	}
 	return CredentialParam{
 		id:       result.Id,
 		username: result.Username,
