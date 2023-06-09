@@ -736,7 +736,7 @@ func TestUseCase_GetCustomersByEmail(t *testing.T) {
 				customerRepo: *mocks.NewCustomerRepoInterface(t),
 			},
 			mockRepo: func(ar *mocks.AdminRepoInterface, customer *CustomerParam) {
-				ar.On("GetCustomersByEmail", customer.Email).Return(
+				ar.On("GetCustomersByEmail", &customer.Email).Return(
 					[]entities.Customer{}, errors.New("err GetCustomersByEmail"))
 			},
 			args:    args{customer: &CustomerParam{}},
