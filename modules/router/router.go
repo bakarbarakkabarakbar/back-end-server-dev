@@ -17,12 +17,12 @@ type Router struct {
 	superAdminReqHandler superAdmin.RequestHandlerInterface
 }
 
-func NewRouter(dbCrud *gorm.DB) Router {
+func NewRouter(gorm *gorm.DB) Router {
 	return Router{
-		customerReqHandler:   customers.NewRequestHandler(dbCrud),
-		adminReqHandler:      admin.NewRequestHandler(dbCrud),
-		authReqHandler:       auth.NewRequestHandler(dbCrud),
-		superAdminReqHandler: superAdmin.NewRequestHandler(dbCrud),
+		customerReqHandler:   customers.NewRequestHandler(gorm),
+		adminReqHandler:      admin.NewRequestHandler(gorm),
+		authReqHandler:       auth.NewRequestHandler(gorm),
+		superAdminReqHandler: superAdmin.NewRequestHandler(gorm),
 	}
 }
 

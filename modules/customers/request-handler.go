@@ -14,11 +14,11 @@ type RequestHandler struct {
 	ctrl ControllerInterface
 }
 
-func NewRequestHandler(dbCrud *gorm.DB) RequestHandler {
+func NewRequestHandler(gorm *gorm.DB) RequestHandler {
 	return RequestHandler{
 		ctrl: Controller{
 			uc: UseCase{
-				customerRepo: repositories.NewCustomerRepo(dbCrud)},
+				customerRepo: repositories.NewCustomerRepo(gorm)},
 		},
 	}
 }
