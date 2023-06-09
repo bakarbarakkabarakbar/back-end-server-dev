@@ -1,0 +1,24 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    volumes:
+      - .:/app
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:latest
+    restart: always
+    container_name: connection-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: SEMUA.cerdas123
+    volumes:
+      - ./my-sql-dump:/docker-entrypoint-initdb.d
+volumes:
+  db-data:
