@@ -16,6 +16,7 @@ func NewAdminRepo(dbCrud *gorm.DB) AdminRepo {
 	}
 }
 
+//go:generate mockery --name AdminRepoInterface
 type AdminRepoInterface interface {
 	GetCustomersByName(name *string) ([]entities.Customer, error)
 	GetCustomersByEmail(email *string) ([]entities.Customer, error)
@@ -36,7 +37,7 @@ func (ar AdminRepo) GetCustomersByName(name *string) ([]entities.Customer, error
 	var customers = make([]entities.Customer, 0)
 	var err = ar.db.Raw(
 		fmt.Sprint("SELECT * FROM customers WHERE CONCAT(first_name, ' ', last_name) LIKE \"%", *name, "%\"")).Scan(&customers).Error
-	//var err = ar.db.Where("Name LIKE ?", "%"+*name+"%").Find(&customers).Error
+	//var err = ar.connection.Where("Name LIKE ?", "%"+*name+"%").Find(&customers).Error
 	if err != nil {
 		return nil, err
 	}
