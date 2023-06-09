@@ -10,12 +10,13 @@ type CustomerRepo struct {
 	db *gorm.DB
 }
 
-func NewCustomerRepo(dbCrud *gorm.DB) CustomerRepo {
+func NewCustomerRepo(gorm *gorm.DB) CustomerRepo {
 	return CustomerRepo{
-		db: dbCrud,
+		db: gorm,
 	}
 }
 
+//go:generate mockery --name CustomerRepoInterface
 type CustomerRepoInterface interface {
 	GetCustomerById(id *uint) (entities.Customer, error)
 	GetCustomerByEmail(email *string) (entities.Customer, error)
