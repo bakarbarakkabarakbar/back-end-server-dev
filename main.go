@@ -2,39 +2,32 @@ package main
 
 import (
 	"back-end-server-dev/modules/router"
-	"back-end-server-dev/utils/db"
+	"back-end-server-dev/utils/orm"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"log"
 )
+
+type Connection struct {
+	orm orm.ObjectRelationalMappingInterface
+}
 
 func main() {
 	var engine = gin.New()
 
-	// open connection db
-	var dbCrud = db.GormMysql()
-
-	if dbCrud == nil {
-		fmt.Println("connection failed to init..!")
-		return
-	}
+	// open connection to db
+	//var dbConnection = connection.NewDatabaseConnection()
+	//dbConnection.MySql()
 	//check connection
-	checkDB, err := dbCrud.DB()
+
+	var dsn = "golang-service-account:STRONG.password79@tcp(34.224.99.112:3306)/miniproject?charset=utf8mb4&parseTime=True&loc=UTC"
+	var conn = Connection{orm: orm.NewObjectRelationalMapping(&dsn)}
+	var gormInstances, err = conn.orm.Gorm()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Error init gorm", err)
 		return
 	}
 
-	//ping to database
-	var errConn = checkDB.Ping()
-	if err != nil {
-		log.Fatal(errConn)
-		return
-	}
-
-	fmt.Println("database connected..!")
-
-	var route = router.NewRouter(dbCrud)
+	var route = router.NewRouter(gormInstances)
 	route.Router(engine)
 
 	errRouter := engine.Run(":8081")
