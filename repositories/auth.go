@@ -15,6 +15,13 @@ func NewAuthRepo(dbCrud *gorm.DB) AuthRepo {
 	}
 }
 
+//go:generate mockery --name AuthRepoInterface
+type AuthRepoInterface interface {
+	GetActorByUsername(username *string) (entities.Actor, error)
+	GetLastActorSessionByToken(token *string) (entities.ActorSession, error)
+	CreateActorSession(session *entities.ActorSession) error
+}
+
 func (ar AuthRepo) GetActorByUsername(username *string) (entities.Actor, error) {
 	var admin entities.Actor
 	var err = ar.db.Where("username = ?", username).Find(&admin).Error
