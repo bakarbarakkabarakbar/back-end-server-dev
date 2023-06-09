@@ -19,7 +19,7 @@ func main() {
 	//dbConnection.MySql()
 	//check connection
 
-	var dsn = "golang-service-account:STRONG.password79@tcp(34.224.99.112:3306)/miniproject?charset=utf8mb4&parseTime=True&loc=UTC"
+	var dsn = "golang-service-account:STRONG.password79@tcp(host.docker.internal:3306)/miniproject?charset=utf8mb4&parseTime=True&loc=UTC"
 	var conn = Connection{orm: orm.NewObjectRelationalMapping(&dsn)}
 	var gormInstances, err = conn.orm.Gorm()
 	if err != nil {
