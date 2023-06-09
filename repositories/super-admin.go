@@ -15,6 +15,7 @@ func NewSuperAdminRepo(dbCrud *gorm.DB) SuperAdminRepo {
 	}
 }
 
+//go:generate mockery --name SuperAdminRepoInterface
 type SuperAdminRepoInterface interface {
 	GetVerifiedAdmins() ([]entities.Actor, error)
 	GetActiveAdmins() ([]entities.Actor, error)
