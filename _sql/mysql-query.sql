@@ -7,7 +7,7 @@ CREATE TABLE actors(
     `is_verified` ENUM('true','false'),
     `is_active` ENUM('true','false'),
 	`created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `modified_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `modified_at` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT `actorsPK` PRIMARY KEY (`id`),
     CONSTRAINT `role_idFK` FOREIGN KEY (`role_id`) REFERENCES actor_roles(`id`)
 );
@@ -21,7 +21,7 @@ CREATE TABLE customers(
     `email` VARCHAR(50),
     `avatar` VARCHAR(200),
 	`created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `modified_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `modified_at` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT `customersPK` PRIMARY KEY (`id`)
 );
 

@@ -7,7 +7,6 @@ import (
 	"errors"
 	"reflect"
 	"testing"
-	"time"
 )
 
 type Connection struct {
@@ -66,13 +65,11 @@ func TestUseCase_GetCustomerByEmail(t *testing.T) {
 			fields: fields{customerRepo: *mocks.NewCustomerRepoInterface(t)},
 			mockRepo: func(cr *mocks.CustomerRepoInterface, data *CustomerParam) {
 				cr.On("GetCustomerByEmail", &data.Email).Return(entities.Customer{
-					Id:         1,
-					FirstName:  "akbar",
-					LastName:   "maulana",
-					Email:      "akbar@example.com",
-					Avatar:     "katara",
-					CreatedAt:  time.Now(),
-					ModifiedAt: time.Now(),
+					Id:        1,
+					FirstName: "akbar",
+					LastName:  "maulana",
+					Email:     "akbar@example.com",
+					Avatar:    "katara",
 				}, nil)
 			},
 			args: args{customer: &CustomerParam{Email: "akbar@example.com"}},
@@ -158,13 +155,11 @@ func TestUseCase_GetCustomerById(t *testing.T) {
 			fields: fields{customerRepo: *mocks.NewCustomerRepoInterface(t)},
 			mockRepo: func(cr *mocks.CustomerRepoInterface, data *CustomerParam) {
 				cr.On("GetCustomerById", &data.Id).Return(entities.Customer{
-					Id:         1,
-					FirstName:  "akbar",
-					LastName:   "maulana",
-					Email:      "akbar@example.com",
-					Avatar:     "katara",
-					CreatedAt:  time.Now(),
-					ModifiedAt: time.Now(),
+					Id:        1,
+					FirstName: "akbar",
+					LastName:  "maulana",
+					Email:     "akbar@example.com",
+					Avatar:    "katara",
 				}, nil)
 			},
 			args: args{customer: &CustomerParam{Id: 1}},

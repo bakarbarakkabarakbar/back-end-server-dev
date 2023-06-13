@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
-	"time"
 )
 
 func TestUseCase_CreateAdmin(t *testing.T) {
@@ -43,8 +42,6 @@ func TestUseCase_CreateAdmin(t *testing.T) {
 					RoleId:     admin.RoleId,
 					IsVerified: "false",
 					IsActive:   "false",
-					CreatedAt:  time.Now(),
-					ModifiedAt: time.Now(),
 				}).Return(
 					errors.New("err CreateAdmin"))
 			},
@@ -67,8 +64,6 @@ func TestUseCase_CreateAdmin(t *testing.T) {
 					RoleId:     admin.RoleId,
 					IsVerified: "false",
 					IsActive:   "false",
-					CreatedAt:  time.Now(),
-					ModifiedAt: time.Now(),
 				}).Return(
 					nil)
 			},
@@ -119,13 +114,11 @@ func TestUseCase_CreateCustomer(t *testing.T) {
 			},
 			mockRepo: func(ar *mocks.AdminRepoInterface, customer *CustomerParam) {
 				ar.On("CreateCustomer", &entities.Customer{
-					Id:         customer.Id,
-					FirstName:  customer.FirstName,
-					LastName:   customer.LastName,
-					Email:      customer.Email,
-					Avatar:     customer.Avatar,
-					CreatedAt:  time.Now(),
-					ModifiedAt: time.Now(),
+					Id:        customer.Id,
+					FirstName: customer.FirstName,
+					LastName:  customer.LastName,
+					Email:     customer.Email,
+					Avatar:    customer.Avatar,
 				}).Return(errors.New("err CreateCustomer"))
 			},
 			args:    args{customer: &CustomerParam{}},
@@ -139,13 +132,11 @@ func TestUseCase_CreateCustomer(t *testing.T) {
 			},
 			mockRepo: func(ar *mocks.AdminRepoInterface, customer *CustomerParam) {
 				ar.On("CreateCustomer", &entities.Customer{
-					Id:         customer.Id,
-					FirstName:  customer.FirstName,
-					LastName:   customer.LastName,
-					Email:      customer.Email,
-					Avatar:     customer.Avatar,
-					CreatedAt:  time.Now(),
-					ModifiedAt: time.Now(),
+					Id:        customer.Id,
+					FirstName: customer.FirstName,
+					LastName:  customer.LastName,
+					Email:     customer.Email,
+					Avatar:    customer.Avatar,
 				}).Return(nil)
 			},
 			args: args{customer: &CustomerParam{
@@ -288,8 +279,6 @@ func TestUseCase_GetAdminById(t *testing.T) {
 						RoleId:     2,
 						IsVerified: "true",
 						IsActive:   "true",
-						CreatedAt:  time.Now(),
-						ModifiedAt: time.Now(),
 					},
 					nil)
 			},
@@ -371,8 +360,6 @@ func TestUseCase_GetAdminsByUsername(t *testing.T) {
 							RoleId:     1,
 							IsVerified: "true",
 							IsActive:   "true",
-							CreatedAt:  time.Now(),
-							ModifiedAt: time.Now(),
 						},
 						{
 							Id:         2,
@@ -381,8 +368,6 @@ func TestUseCase_GetAdminsByUsername(t *testing.T) {
 							RoleId:     2,
 							IsVerified: "false",
 							IsActive:   "false",
-							CreatedAt:  time.Now(),
-							ModifiedAt: time.Now(),
 						},
 					}, nil,
 				)
@@ -476,8 +461,6 @@ func TestUseCase_GetAllAdmins(t *testing.T) {
 							RoleId:     1,
 							IsVerified: "true",
 							IsActive:   "true",
-							CreatedAt:  time.Now(),
-							ModifiedAt: time.Now(),
 						},
 						{
 							Id:         2,
@@ -486,8 +469,6 @@ func TestUseCase_GetAllAdmins(t *testing.T) {
 							RoleId:     2,
 							IsVerified: "false",
 							IsActive:   "false",
-							CreatedAt:  time.Now(),
-							ModifiedAt: time.Now(),
 						},
 					}, nil,
 				)
@@ -573,22 +554,18 @@ func TestUseCase_GetAllCustomers(t *testing.T) {
 				ar.On("GetAllCustomers", page).Return(
 					[]entities.Customer{
 						{
-							Id:         1,
-							FirstName:  "akbar",
-							LastName:   "maulana",
-							Email:      "akbar@example.com",
-							Avatar:     "aang",
-							CreatedAt:  time.Now(),
-							ModifiedAt: time.Now(),
+							Id:        1,
+							FirstName: "akbar",
+							LastName:  "maulana",
+							Email:     "akbar@example.com",
+							Avatar:    "aang",
 						},
 						{
-							Id:         2,
-							FirstName:  "maulana",
-							LastName:   "akbar",
-							Email:      "maulana@example.com",
-							Avatar:     "zuko",
-							CreatedAt:  time.Now(),
-							ModifiedAt: time.Now(),
+							Id:        2,
+							FirstName: "maulana",
+							LastName:  "akbar",
+							Email:     "maulana@example.com",
+							Avatar:    "zuko",
 						},
 					}, nil)
 			},
@@ -671,13 +648,11 @@ func TestUseCase_GetCustomerById(t *testing.T) {
 			mockRepo: func(cr *mocks.CustomerRepoInterface, customer *CustomerParam) {
 				cr.On("GetCustomerById", &customer.Id).Return(
 					entities.Customer{
-						Id:         1,
-						FirstName:  "akbar",
-						LastName:   "maulana",
-						Email:      "akbar@example.com",
-						Avatar:     "katara",
-						CreatedAt:  time.Now(),
-						ModifiedAt: time.Now(),
+						Id:        1,
+						FirstName: "akbar",
+						LastName:  "maulana",
+						Email:     "akbar@example.com",
+						Avatar:    "katara",
 					}, nil)
 			},
 			args: args{customer: &CustomerParam{
@@ -736,7 +711,7 @@ func TestUseCase_GetCustomersByEmail(t *testing.T) {
 				customerRepo: *mocks.NewCustomerRepoInterface(t),
 			},
 			mockRepo: func(ar *mocks.AdminRepoInterface, customer *CustomerParam) {
-				ar.On("GetCustomersByEmail", customer.Email).Return(
+				ar.On("GetCustomersByEmail", &customer.Email).Return(
 					[]entities.Customer{}, errors.New("err GetCustomersByEmail"))
 			},
 			args:    args{customer: &CustomerParam{}},
@@ -753,22 +728,18 @@ func TestUseCase_GetCustomersByEmail(t *testing.T) {
 				cr.On("GetCustomersByEmail", &customer.Email).Return(
 					[]entities.Customer{
 						{
-							Id:         1,
-							FirstName:  "akbar",
-							LastName:   "maulana",
-							Email:      "akbar@example.com",
-							Avatar:     "katara",
-							CreatedAt:  time.Now(),
-							ModifiedAt: time.Now(),
+							Id:        1,
+							FirstName: "akbar",
+							LastName:  "maulana",
+							Email:     "akbar@example.com",
+							Avatar:    "katara",
 						},
 						{
-							Id:         2,
-							FirstName:  "maulana",
-							LastName:   "akbar",
-							Email:      "maulana@example.com",
-							Avatar:     "aang",
-							CreatedAt:  time.Now(),
-							ModifiedAt: time.Now(),
+							Id:        2,
+							FirstName: "maulana",
+							LastName:  "akbar",
+							Email:     "maulana@example.com",
+							Avatar:    "aang",
 						},
 					}, nil)
 			},
@@ -854,22 +825,18 @@ func TestUseCase_GetCustomersByName(t *testing.T) {
 				ar.On("GetCustomersByName", &customer.FirstName).Return(
 					[]entities.Customer{
 						{
-							Id:         1,
-							FirstName:  "akbar",
-							LastName:   "maulana",
-							Email:      "akbar@example.com",
-							Avatar:     "aang",
-							CreatedAt:  time.Time{},
-							ModifiedAt: time.Time{},
+							Id:        1,
+							FirstName: "akbar",
+							LastName:  "maulana",
+							Email:     "akbar@example.com",
+							Avatar:    "aang",
 						},
 						{
-							Id:         2,
-							FirstName:  "maulana",
-							LastName:   "akbar",
-							Email:      "maulana@example.com",
-							Avatar:     "zuko",
-							CreatedAt:  time.Time{},
-							ModifiedAt: time.Time{},
+							Id:        2,
+							FirstName: "maulana",
+							LastName:  "akbar",
+							Email:     "maulana@example.com",
+							Avatar:    "zuko",
 						},
 					}, nil)
 			},
@@ -958,8 +925,6 @@ func TestUseCase_ModifyAdmin(t *testing.T) {
 						RoleId:     admin.RoleId,
 						IsVerified: "true",
 						IsActive:   "true",
-						CreatedAt:  time.Now(),
-						ModifiedAt: time.Now(),
 					}, nil)
 				ar.On("ModifyAdmin", &entities.Actor{
 					Id:         admin.Id,
@@ -968,8 +933,6 @@ func TestUseCase_ModifyAdmin(t *testing.T) {
 					RoleId:     admin.RoleId,
 					IsVerified: "true",
 					IsActive:   "true",
-					CreatedAt:  time.Now(),
-					ModifiedAt: time.Now(),
 				}).Return(nil)
 			},
 			args: args{admin: &ActorParamWithPassword{
@@ -1035,22 +998,19 @@ func TestUseCase_ModifyCustomer(t *testing.T) {
 			mockRepo: func(cr *mocks.CustomerRepoInterface, ar *mocks.AdminRepoInterface, customer *CustomerParam) {
 				cr.On("GetCustomerById", &customer.Id).Return(
 					entities.Customer{
-						Id:         1,
-						FirstName:  "akbar",
-						LastName:   "maulana",
-						Email:      "akbar@example.com",
-						Avatar:     "aang",
-						CreatedAt:  time.Now(),
-						ModifiedAt: time.Now(),
+						Id:        1,
+						FirstName: "akbar",
+						LastName:  "maulana",
+						Email:     "akbar@example.com",
+						Avatar:    "aang",
 					}, nil)
 				ar.On("ModifyCustomer", &entities.Customer{
-					Id:         1,
-					FirstName:  "akbar",
-					LastName:   "maulana",
-					Email:      "akbar@example.com",
-					Avatar:     "aang",
-					CreatedAt:  time.Now(),
-					ModifiedAt: time.Now()}).Return(nil)
+					Id:        1,
+					FirstName: "akbar",
+					LastName:  "maulana",
+					Email:     "akbar@example.com",
+					Avatar:    "aang",
+				}).Return(nil)
 			},
 			args: args{customer: &CustomerParam{
 				Id:        1,
@@ -1116,13 +1076,11 @@ func TestUseCase_RemoveCustomerById(t *testing.T) {
 			mockRepo: func(cr *mocks.CustomerRepoInterface, ar *mocks.AdminRepoInterface, customer *CustomerParam) {
 				cr.On("GetCustomerById", &customer.Id).Return(
 					entities.Customer{
-						Id:         1,
-						FirstName:  "akbar",
-						LastName:   "maulana",
-						Email:      "akbar@example.com",
-						Avatar:     "aang",
-						CreatedAt:  time.Now(),
-						ModifiedAt: time.Now(),
+						Id:        1,
+						FirstName: "akbar",
+						LastName:  "maulana",
+						Email:     "akbar@example.com",
+						Avatar:    "aang",
 					}, nil)
 				ar.On("RemoveCustomerById", &customer.Id).Return(
 					nil)

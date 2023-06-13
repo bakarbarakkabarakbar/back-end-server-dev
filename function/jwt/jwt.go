@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt"
+	"go/types"
 	"time"
 )
 
@@ -143,6 +144,8 @@ func VerifyAdminToken(auth *AuthHeader) (AuthHeader, error) {
 			case json.Number:
 				v, _ := exp.Int64()
 				tm = time.Unix(v, 0)
+			case types.Nil:
+				continue
 			}
 			if tm.Before(time.Now()) {
 				return AuthHeader{}, errors.New("expires")

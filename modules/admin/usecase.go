@@ -6,7 +6,6 @@ import (
 	"crypto/sha1"
 	"errors"
 	"fmt"
-	"time"
 )
 
 type UseCase struct {
@@ -112,13 +111,11 @@ func (uc UseCase) CreateCustomer(customer *CustomerParam) error {
 	var newCustomer *entities.Customer
 
 	newCustomer = &entities.Customer{
-		Id:         customer.Id,
-		FirstName:  customer.FirstName,
-		LastName:   customer.LastName,
-		Email:      customer.Email,
-		Avatar:     customer.Avatar,
-		CreatedAt:  time.Now(),
-		ModifiedAt: time.Now(),
+		Id:        customer.Id,
+		FirstName: customer.FirstName,
+		LastName:  customer.LastName,
+		Email:     customer.Email,
+		Avatar:    customer.Avatar,
 	}
 
 	var err = uc.adminRepo.CreateCustomer(newCustomer)
@@ -132,13 +129,11 @@ func (uc UseCase) ModifyCustomer(customer *CustomerParam) error {
 		return err
 	}
 	newCustomer = &entities.Customer{
-		Id:         result.Id,
-		FirstName:  customer.FirstName,
-		LastName:   customer.LastName,
-		Email:      customer.Email,
-		Avatar:     customer.Avatar,
-		CreatedAt:  result.CreatedAt,
-		ModifiedAt: time.Now(),
+		Id:        result.Id,
+		FirstName: customer.FirstName,
+		LastName:  customer.LastName,
+		Email:     customer.Email,
+		Avatar:    customer.Avatar,
 	}
 
 	err = uc.adminRepo.ModifyCustomer(newCustomer)
@@ -235,8 +230,6 @@ func (uc UseCase) CreateAdmin(admin *ActorParamWithPassword) error {
 		RoleId:     admin.RoleId,
 		IsVerified: "false",
 		IsActive:   "false",
-		CreatedAt:  time.Now(),
-		ModifiedAt: time.Now(),
 	}
 
 	var err = uc.adminRepo.CreateAdmin(newAdmin)
@@ -273,8 +266,6 @@ func (uc UseCase) ModifyAdmin(admin *ActorParamWithPassword) error {
 		RoleId:     admin.RoleId,
 		IsVerified: result.IsVerified,
 		IsActive:   result.IsActive,
-		CreatedAt:  result.CreatedAt,
-		ModifiedAt: time.Now(),
 	}
 
 	err = uc.adminRepo.ModifyAdmin(newAdmin)

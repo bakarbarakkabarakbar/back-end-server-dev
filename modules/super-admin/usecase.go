@@ -4,7 +4,6 @@ import (
 	"back-end-server-dev/entities"
 	"back-end-server-dev/repositories"
 	"errors"
-	"time"
 )
 
 type UseCase struct {
@@ -157,8 +156,6 @@ func (uc UseCase) ModifyStatusAdminById(actor *ActorParam) error {
 		RoleId:     result.RoleId,
 		IsVerified: actor.IsVerified,
 		IsActive:   actor.IsActive,
-		CreatedAt:  result.CreatedAt,
-		ModifiedAt: time.Now(),
 	}
 	err = uc.adminRepo.ModifyAdmin(newAdmin)
 	return err

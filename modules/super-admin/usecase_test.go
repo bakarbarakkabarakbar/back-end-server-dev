@@ -6,7 +6,6 @@ import (
 	"errors"
 	"reflect"
 	"testing"
-	"time"
 )
 
 func TestUseCase_GetActiveAdmins(t *testing.T) {
@@ -51,8 +50,6 @@ func TestUseCase_GetActiveAdmins(t *testing.T) {
 						RoleId:     1,
 						IsVerified: "true",
 						IsActive:   "true",
-						CreatedAt:  time.Now(),
-						ModifiedAt: time.Now(),
 					},
 					{
 						Id:         2,
@@ -61,8 +58,6 @@ func TestUseCase_GetActiveAdmins(t *testing.T) {
 						RoleId:     1,
 						IsVerified: "false",
 						IsActive:   "true",
-						CreatedAt:  time.Now(),
-						ModifiedAt: time.Now(),
 					},
 				}, nil)
 			},
@@ -482,8 +477,6 @@ func TestUseCase_GetVerifiedAdmins(t *testing.T) {
 							RoleId:     2,
 							IsVerified: "true",
 							IsActive:   "false",
-							CreatedAt:  time.Now(),
-							ModifiedAt: time.Now(),
 						},
 						{
 							Id:         2,
@@ -492,8 +485,6 @@ func TestUseCase_GetVerifiedAdmins(t *testing.T) {
 							RoleId:     1,
 							IsVerified: "true",
 							IsActive:   "true",
-							CreatedAt:  time.Now(),
-							ModifiedAt: time.Now(),
 						},
 					},
 					nil)
@@ -660,8 +651,6 @@ func TestUseCase_ModifyStatusAdminById(t *testing.T) {
 						RoleId:     1,
 						IsVerified: "true",
 						IsActive:   "true",
-						CreatedAt:  time.Now(),
-						ModifiedAt: time.Now(),
 					},
 					nil)
 				ar.On("ModifyAdmin", &entities.Actor{
@@ -671,8 +660,6 @@ func TestUseCase_ModifyStatusAdminById(t *testing.T) {
 					RoleId:     1,
 					IsVerified: "true",
 					IsActive:   "true",
-					CreatedAt:  time.Now(),
-					ModifiedAt: time.Now(),
 				}).Return(
 					nil)
 			},
@@ -749,8 +736,6 @@ func TestUseCase_RemoveAdminById(t *testing.T) {
 						RoleId:     1,
 						IsVerified: "true",
 						IsActive:   "true",
-						CreatedAt:  time.Now(),
-						ModifiedAt: time.Now(),
 					},
 					nil)
 				sar.On("RemoveAdminById", &actor.Id).Return(

@@ -6,7 +6,6 @@ import (
 	"errors"
 	"reflect"
 	"testing"
-	"time"
 )
 
 func TestUseCase_CreateActorSession(t *testing.T) {
@@ -29,10 +28,7 @@ func TestUseCase_CreateActorSession(t *testing.T) {
 			name:   "Error: check when empty struct passed",
 			fields: fields{authRepo: *mocks.NewAuthRepoInterface(t)},
 			mockRepo: func(ar *mocks.AuthRepoInterface, data *ActorSessionParam) {
-				ar.On("CreateActorSession", &entities.ActorSession{
-					CreatedAt: time.Now(),
-					ExpiresAt: time.Now().Add(time.Hour * 1),
-				}).Return(
+				ar.On("CreateActorSession", &entities.ActorSession{}).Return(
 					errors.New("err CreateActorSession"))
 			},
 			args:    args{account: &ActorSessionParam{}},
@@ -44,11 +40,9 @@ func TestUseCase_CreateActorSession(t *testing.T) {
 			fields: fields{authRepo: *mocks.NewAuthRepoInterface(t)},
 			mockRepo: func(ar *mocks.AuthRepoInterface, data *ActorSessionParam) {
 				ar.On("CreateActorSession", &entities.ActorSession{
-					Id:        1,
-					UserId:    1,
-					Token:     "TokenJWT",
-					CreatedAt: time.Now(),
-					ExpiresAt: time.Now().Add(time.Hour * 1),
+					Id:     1,
+					UserId: 1,
+					Token:  "TokenJWT",
 				}).Return(nil)
 			},
 			args: args{account: &ActorSessionParam{
@@ -113,8 +107,6 @@ func TestUseCase_GetCredentialByUsername(t *testing.T) {
 						RoleId:     1,
 						IsVerified: "true",
 						IsActive:   "true",
-						CreatedAt:  time.Now(),
-						ModifiedAt: time.Now(),
 					},
 					nil)
 			},
@@ -182,11 +174,9 @@ func TestUseCase_GetLastActorSessionByToken(t *testing.T) {
 			mockRepo: func(ar *mocks.AuthRepoInterface, data *ActorSessionParam) {
 				ar.On("GetLastActorSessionByToken", &data.Token).Return(
 					entities.ActorSession{
-						Id:        1,
-						UserId:    1,
-						Token:     data.Token,
-						CreatedAt: time.Now(),
-						ExpiresAt: time.Now(),
+						Id:     1,
+						UserId: 1,
+						Token:  data.Token,
 					},
 					nil)
 			},

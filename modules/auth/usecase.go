@@ -3,7 +3,6 @@ package auth
 import (
 	"back-end-server-dev/entities"
 	"back-end-server-dev/repositories"
-	"time"
 )
 
 type UseCase struct {
@@ -42,11 +41,9 @@ func (uc UseCase) CreateActorSession(customer *ActorSessionParam) error {
 	var newSession *entities.ActorSession
 
 	newSession = &entities.ActorSession{
-		Id:        customer.Id,
-		UserId:    customer.ActorId,
-		Token:     customer.Token,
-		CreatedAt: time.Now(),
-		ExpiresAt: time.Now().Add(time.Hour * 1),
+		Id:     customer.Id,
+		UserId: customer.ActorId,
+		Token:  customer.Token,
 	}
 
 	var err = uc.authRepo.CreateActorSession(newSession)
