@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:Customer
+Available request handler;
+:GetCustomer
+request handler;
+fork
+    :GetCustomerById
+    controller;
+    :GetCustomerById
+    usecase;
+    :GetCustomerById
+    repository;
+fork again
+    :GetCustomerByEmail
+    controller;
+    :GetCustomerByEmail
+    usecase;
+    :GetCustomerByEmail
+    repository;
+end fork
+@enduml
+

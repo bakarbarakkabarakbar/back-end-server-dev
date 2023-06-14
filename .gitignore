@@ -1,0 +1,4 @@
+vendor
+.env
+*_mock.go
+.idea

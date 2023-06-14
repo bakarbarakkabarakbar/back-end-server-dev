@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+participant Router
+participant RequestHandler as rh
+participant Controller as ctrl
+participant MiddleWare as mw
+participant UseCase as uc
+participant Repository as repo
+
+Router -> rh : rh.CreateAppoinment(context)
+rh -> ctrl : ctrl.CreateAppoinment(request)
+ctrl -> mw : mw.BindAndValidate(request, payload)
+mw --> ctrl : dto
+ctrl -> uc : uc.CreateAppoinment(dto)
+uc -> repo : repo.isCoachExist(ctx, coachId)
+uc -> repo : repo.isCustomerExist(ctx, customerId)
+repo --> uc : true, true
+uc -> repo : repo.GetSchedule(ctx, coachId)
+repo --> uc : schedule
+uc -> uc : uc.evaluateAvailability(schedule, payload)
+uc --> uc : false
+uc --> ctrl : error
+ctrl --> rh : response, error
+rh --> Router : 400, error response
+
+@enduml
