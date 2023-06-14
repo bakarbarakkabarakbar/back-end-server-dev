@@ -87,7 +87,7 @@ func TestUseCase_GetCustomerByEmail(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockRepo(&tt.fields.customerRepo, tt.args.customer)
 			uc := UseCase{
-				customerRepo: &tt.fields.customerRepo,
+				cr: &tt.fields.customerRepo,
 			}
 			got, err := uc.GetCustomerByEmail(tt.args.customer)
 			if (err != nil) != tt.wantErr {
@@ -177,7 +177,7 @@ func TestUseCase_GetCustomerById(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockRepo(&tt.fields.customerRepo, tt.args.customer)
 			uc := UseCase{
-				customerRepo: &tt.fields.customerRepo,
+				cr: &tt.fields.customerRepo,
 			}
 			got, err := uc.GetCustomerById(tt.args.customer)
 			if (err != nil) != tt.wantErr {

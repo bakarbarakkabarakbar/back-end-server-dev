@@ -1,9 +1,7 @@
 package customers
 
 import (
-	"back-end-server-dev/repositories"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 
@@ -14,13 +12,9 @@ type RequestHandler struct {
 	ctrl ControllerInterface
 }
 
-func NewRequestHandler(gorm *gorm.DB) RequestHandler {
+func NewRequestHandler(ctrl Controller) RequestHandler {
 	return RequestHandler{
-		ctrl: Controller{
-			uc: UseCase{
-				customerRepo: repositories.NewCustomerRepo(gorm)},
-		},
-	}
+		ctrl: ctrl}
 }
 
 type RequestHandlerInterface interface {

@@ -3,10 +3,8 @@ package auth
 import (
 	"back-end-server-dev/dto"
 	"back-end-server-dev/function/jwt"
-	"back-end-server-dev/repositories"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -14,20 +12,14 @@ type RequestHandler struct {
 	ctrl ControllerInterface
 }
 
+func NewRequestHandler(ctrl Controller) RequestHandler {
+	return RequestHandler{ctrl: ctrl}
+}
+
 type RequestHandlerInterface interface {
 	CheckSuperAdminAuthorization(c *gin.Context)
 	CheckAdminAuthorization(c *gin.Context)
 	CreateAuthorization(c *gin.Context)
-}
-
-func NewRequestHandler(dbCrud *gorm.DB) RequestHandler {
-	return RequestHandler{
-		ctrl: Controller{
-			uc: UseCase{
-				authRepo: repositories.NewAuthRepo(dbCrud),
-			},
-		},
-	}
 }
 
 func (rh RequestHandler) CheckSuperAdminAuthorization(c *gin.Context) {

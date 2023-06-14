@@ -6,6 +6,10 @@ type Controller struct {
 	uc UseCaseInterface
 }
 
+func NewController(uc UseCase) Controller {
+	return Controller{uc: uc}
+}
+
 type ControllerInterface interface {
 	GetVerifiedAdmins() (ResponseParam, error)
 	GetActiveAdmins() (ResponseParam, error)

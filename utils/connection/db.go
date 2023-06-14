@@ -5,12 +5,12 @@ import (
 	"gorm.io/gorm"
 )
 
-type DatabaseConnection struct {
+type Database struct {
 	DsnSQL string
 }
 
-func NewDatabaseConnection(dsn string) DatabaseConnection {
-	return DatabaseConnection{DsnSQL: dsn}
+func NewDatabase(dsn string) Database {
+	return Database{DsnSQL: dsn}
 }
 
 //go:generate mockery --name DatabaseInterface
@@ -18,7 +18,7 @@ type DatabaseInterface interface {
 	MySql() gorm.Dialector
 }
 
-func (dc DatabaseConnection) MySql() gorm.Dialector {
+func (dc Database) MySql() gorm.Dialector {
 	var conn gorm.Dialector
 	conn = mysql.Open(dc.DsnSQL)
 	return conn

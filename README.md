@@ -64,6 +64,35 @@ be any happier :)
 
 Feel free to contact me via issue or hit me via akbar.muhammadakbarmaulana@gmail.com
 
+## Env
+
+In Windows
+```shell
+setx MYSQL_SERVER_HOST localhost
+```
+```shell
+setx MYSQL_SERVER_PORT 3306
+```
+```shell
+setx MYSQL_SERVER_SCHEMA miniproject
+```
+```shell
+setx MYSQL_SERVER_USER root
+```
+```shell
+setx MYSQL_SERVER_PASSWORD 1234QWERasdf.
+```
+```shell
+setx API_PORT 8081
+```
+```shell
+setx SWAGGER_PORT 8082
+```
+```shell
+setx APP_PORT 8080
+```
+
+
 ## Setup
 
 1. Install Go version 1.20.4

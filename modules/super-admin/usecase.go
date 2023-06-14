@@ -7,8 +7,15 @@ import (
 )
 
 type UseCase struct {
-	superAdminRepo repositories.SuperAdminRepoInterface
-	adminRepo      repositories.AdminRepoInterface
+	sar repositories.SuperAdminRepoInterface
+	ar  repositories.AdminRepoInterface
+}
+
+func NewUseCase(sar repositories.SuperAdminRepo, ar repositories.AdminRepo) UseCase {
+	return UseCase{
+		sar: sar,
+		ar:  ar,
+	}
 }
 
 type UseCaseInterface interface {
@@ -26,7 +33,7 @@ type UseCaseInterface interface {
 
 func (uc UseCase) GetVerifiedAdmins() ([]ActorParam, error) {
 	var actors = make([]ActorParam, 0)
-	var results, err = uc.superAdminRepo.GetVerifiedAdmins()
+	var results, err = uc.sar.GetVerifiedAdmins()
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +54,7 @@ func (uc UseCase) GetVerifiedAdmins() ([]ActorParam, error) {
 
 func (uc UseCase) GetActiveAdmins() ([]ActorParam, error) {
 	var actors = make([]ActorParam, 0)
-	var results, err = uc.superAdminRepo.GetActiveAdmins()
+	var results, err = uc.sar.GetActiveAdmins()
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +75,7 @@ func (uc UseCase) GetActiveAdmins() ([]ActorParam, error) {
 
 func (uc UseCase) GetRegisterAdminById(register *RegisterApprovalParam) (RegisterApprovalParam, error) {
 	var newRegister RegisterApprovalParam
-	var result, err = uc.superAdminRepo.GetRegisterAdminById(&register.Id)
+	var result, err = uc.sar.GetRegisterAdminById(&register.Id)
 	if err != nil {
 		return RegisterApprovalParam{}, err
 	}
@@ -84,7 +91,7 @@ func (uc UseCase) GetRegisterAdminById(register *RegisterApprovalParam) (Registe
 
 func (uc UseCase) GetApprovedAdmins() ([]RegisterApprovalParam, error) {
 	var registers = make([]RegisterApprovalParam, 0)
-	var results, err = uc.superAdminRepo.GetApprovedAdmins()
+	var results, err = uc.sar.GetApprovedAdmins()
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +111,7 @@ func (uc UseCase) GetApprovedAdmins() ([]RegisterApprovalParam, error) {
 
 func (uc UseCase) GetRejectedAdmin() ([]RegisterApprovalParam, error) {
 	var registers = make([]RegisterApprovalParam, 0)
-	var results, err = uc.superAdminRepo.GetRejectedAdmins()
+	var results, err = uc.sar.GetRejectedAdmins()
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +131,7 @@ func (uc UseCase) GetRejectedAdmin() ([]RegisterApprovalParam, error) {
 
 func (uc UseCase) GetPendingAdmins() ([]RegisterApprovalParam, error) {
 	var registers = make([]RegisterApprovalParam, 0)
-	var results, err = uc.superAdminRepo.GetPendingAdmins()
+	var results, err = uc.sar.GetPendingAdmins()
 	if err != nil {
 		return nil, err
 	}
@@ -144,7 +151,7 @@ func (uc UseCase) GetPendingAdmins() ([]RegisterApprovalParam, error) {
 
 func (uc UseCase) ModifyStatusAdminById(actor *ActorParam) error {
 	var newAdmin *entities.Actor
-	var result, err = uc.adminRepo.GetAdminById(&actor.Id)
+	var result, err = uc.ar.GetAdminById(&actor.Id)
 	if err != nil {
 		return err
 	}
@@ -157,13 +164,13 @@ func (uc UseCase) ModifyStatusAdminById(actor *ActorParam) error {
 		IsVerified: actor.IsVerified,
 		IsActive:   actor.IsActive,
 	}
-	err = uc.adminRepo.ModifyAdmin(newAdmin)
+	err = uc.ar.ModifyAdmin(newAdmin)
 	return err
 }
 
 func (uc UseCase) ModifyRegisterAdminById(register *RegisterApprovalParam) error {
 	var newAdmin *entities.RegisterApproval
-	var result, err = uc.superAdminRepo.GetRegisterAdminById(&register.Id)
+	var result, err = uc.sar.GetRegisterAdminById(&register.Id)
 	if err != nil {
 		return err
 	}
@@ -174,17 +181,17 @@ func (uc UseCase) ModifyRegisterAdminById(register *RegisterApprovalParam) error
 		SuperAdminId: result.SuperAdminId,
 		Status:       register.Status,
 	}
-	err = uc.superAdminRepo.ModifyRegisterAdminById(newAdmin)
+	err = uc.sar.ModifyRegisterAdminById(newAdmin)
 	return err
 }
 
 func (uc UseCase) RemoveAdminById(admin *ActorParam) (ActorParam, error) {
-	var result, err = uc.adminRepo.GetAdminById(&admin.Id)
+	var result, err = uc.ar.GetAdminById(&admin.Id)
 	if err != nil {
 		return ActorParam{}, err
 	}
 
-	err = uc.superAdminRepo.RemoveAdminById(&admin.Id)
+	err = uc.sar.RemoveAdminById(&admin.Id)
 	if err != nil {
 		return ActorParam{}, err
 	}
@@ -200,12 +207,12 @@ func (uc UseCase) RemoveAdminById(admin *ActorParam) (ActorParam, error) {
 }
 
 func (uc UseCase) RemoveRegisterAdminById(register *RegisterApprovalParam) (RegisterApprovalParam, error) {
-	var result, err = uc.superAdminRepo.GetRegisterAdminById(&register.Id)
+	var result, err = uc.sar.GetRegisterAdminById(&register.Id)
 	if err != nil {
 		return RegisterApprovalParam{}, err
 	}
 
-	err = uc.superAdminRepo.RemoveRegisterAdminById(&register.Id)
+	err = uc.sar.RemoveRegisterAdminById(&register.Id)
 	if err != nil {
 		return RegisterApprovalParam{}, err
 	}

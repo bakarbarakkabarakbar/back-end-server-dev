@@ -5,7 +5,11 @@ import (
 )
 
 type UseCase struct {
-	customerRepo repositories.CustomerRepoInterface
+	cr repositories.CustomerRepoInterface
+}
+
+func NewUseCase(cr repositories.CustomerRepo) UseCase {
+	return UseCase{cr: cr}
 }
 
 type UseCaseInterface interface {
@@ -14,7 +18,7 @@ type UseCaseInterface interface {
 }
 
 func (uc UseCase) GetCustomerById(customer *CustomerParam) (CustomerParam, error) {
-	var result, err = uc.customerRepo.GetCustomerById(&customer.Id)
+	var result, err = uc.cr.GetCustomerById(&customer.Id)
 	return CustomerParam{
 		Id:        result.Id,
 		FirstName: result.FirstName,
@@ -25,7 +29,7 @@ func (uc UseCase) GetCustomerById(customer *CustomerParam) (CustomerParam, error
 }
 
 func (uc UseCase) GetCustomerByEmail(customer *CustomerParam) (CustomerParam, error) {
-	var result, err = uc.customerRepo.GetCustomerByEmail(&customer.Email)
+	var result, err = uc.cr.GetCustomerByEmail(&customer.Email)
 	return CustomerParam{
 		Id:        result.Id,
 		FirstName: result.FirstName,

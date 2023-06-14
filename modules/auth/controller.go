@@ -12,6 +12,10 @@ type Controller struct {
 	uc UseCaseInterface
 }
 
+func NewController(uc UseCase) Controller {
+	return Controller{uc: uc}
+}
+
 type ControllerInterface interface {
 	CheckAccountCredential(req *CredentialParam) (ResponseParam, error)
 	GetLastActorSessionByToken(req *ActorSessionParam) (ResponseParam, error)

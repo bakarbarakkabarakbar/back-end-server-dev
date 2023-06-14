@@ -5,7 +5,7 @@ name: Fix Test Case
 
 on:
   push:
-    branches: [ "fix/test-case" ]
+    branches: [ "dev/swagger" ]
 
 jobs:
   build:
@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           path: ${{ env.GOPATH }}/src/myproject
-          ref: fix/test-case
+          ref: dev/swagger
 
       - name: Set up Go
         uses: actions/setup-go@v4

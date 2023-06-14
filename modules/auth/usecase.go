@@ -9,6 +9,10 @@ type UseCase struct {
 	authRepo repositories.AuthRepoInterface
 }
 
+func NewUseCase(ar repositories.AuthRepo) UseCase {
+	return UseCase{authRepo: ar}
+}
+
 type UseCaseInterface interface {
 	GetCredentialByUsername(account *CredentialParam) (CredentialParam, error)
 	CreateActorSession(customer *ActorSessionParam) error

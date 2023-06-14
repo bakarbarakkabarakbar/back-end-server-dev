@@ -10,6 +10,10 @@ type Controller struct {
 	uc UseCaseInterface
 }
 
+func NewController(uc UseCase) Controller {
+	return Controller{uc: uc}
+}
+
 type ControllerInterface interface {
 	GetCustomerById(req *CustomerParam) (ResponseParam, error)
 	GetCustomersByName(req *CustomerParam) (ResponseParam, error)

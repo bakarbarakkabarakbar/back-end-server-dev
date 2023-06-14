@@ -13,6 +13,14 @@ type UseCase struct {
 	customerRepo repositories.CustomerRepoInterface
 }
 
+func NewUseCase(ar repositories.AdminRepo,
+	cr repositories.CustomerRepo) UseCase {
+	return UseCase{
+		adminRepo:    ar,
+		customerRepo: cr,
+	}
+}
+
 type UseCaseInterface interface {
 	GetCustomerById(customer *CustomerParam) (CustomerParam, error)
 	GetCustomersByName(customer *CustomerParam) ([]CustomerParam, error)

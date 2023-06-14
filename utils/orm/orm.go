@@ -11,8 +11,8 @@ type ObjectRelationalMapping struct {
 	sql connection.DatabaseInterface
 }
 
-func NewObjectRelationalMapping(dsn *string) ObjectRelationalMapping {
-	return ObjectRelationalMapping{sql: connection.DatabaseConnection{DsnSQL: *dsn}}
+func NewObjectRelationalMapping(sql connection.Database) ObjectRelationalMapping {
+	return ObjectRelationalMapping{sql: sql}
 }
 
 //go:generate mockery --name ObjectRelationalMappingInterface

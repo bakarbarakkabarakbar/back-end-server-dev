@@ -6,7 +6,8 @@ import (
 	"back-end-server-dev/modules/customers"
 	superAdmin "back-end-server-dev/modules/super-admin"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"net/http"
 )
 
@@ -17,14 +18,14 @@ type Router struct {
 	superAdminReqHandler superAdmin.RequestHandlerInterface
 }
 
-func NewRouter(gorm *gorm.DB) Router {
-	return Router{
-		customerReqHandler:   customers.NewRequestHandler(gorm),
-		adminReqHandler:      admin.NewRequestHandler(gorm),
-		authReqHandler:       auth.NewRequestHandler(gorm),
-		superAdminReqHandler: superAdmin.NewRequestHandler(gorm),
-	}
-}
+//func NewRouter(gorm *gorm.DB) Router {
+//	return Router{
+//		customerReqHandler:   customers.NewRequestHandler(gorm),
+//		adminReqHandler:      admin.NewRequestHandler(gorm),
+//		authReqHandler:       auth.NewRequestHandler(gorm),
+//		superAdminReqHandler: superAdmin.NewRequestHandler(gorm),
+//	}
+//}
 
 func (r Router) Router(router *gin.Engine) {
 	var basePath = "/"
@@ -36,6 +37,7 @@ func (r Router) Router(router *gin.Engine) {
 			})
 		})
 	basePathGroup.GET("/login", r.authReqHandler.CreateAuthorization)
+	basePathGroup.GET("/swagger", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	var userPath = "/customer"
 	var userPathGroup = router.Group(userPath)

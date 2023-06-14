@@ -1,4 +1,6 @@
 CREATE SCHEMA `miniproject` DEFAULT CHARACTER SET utf8mb4 ;
+
+USE miniproject;
 CREATE TABLE actors(
 	`id` BIGINT UNSIGNED,
     `username` VARCHAR(50),
@@ -11,7 +13,6 @@ CREATE TABLE actors(
     CONSTRAINT `actorsPK` PRIMARY KEY (`id`),
     CONSTRAINT `role_idFK` FOREIGN KEY (`role_id`) REFERENCES actor_roles(`id`)
 );
-
 DROP TABLE actors;
 
 CREATE TABLE customers(
@@ -24,7 +25,6 @@ CREATE TABLE customers(
     `modified_at` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT `customersPK` PRIMARY KEY (`id`)
 );
-
 DROP TABLE customers;
 
 CREATE TABLE actor_roles(
@@ -32,6 +32,7 @@ CREATE TABLE actor_roles(
     `role_name` VARCHAR(50),
     CONSTRAINT `actor_rolesPK` PRIMARY KEY (`id`)
 );
+DROP TABLE actor_roles;
 
 CREATE TABLE register_approvals(
 	`id` INT UNSIGNED,
@@ -40,7 +41,6 @@ CREATE TABLE register_approvals(
 	`status` VARCHAR(50),
     CONSTRAINT `register_approvalsPK` PRIMARY KEY (`id`)
 );
-
 DROP TABLE register_approvals;
 
 CREATE TABLE users (
@@ -52,7 +52,6 @@ CREATE TABLE users (
    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-
 CREATE TABLE actor_sessions (
   `id` INT UNSIGNED AUTO_INCREMENT,
   `user_id` INT UNSIGNED NOT NULL,
@@ -60,10 +59,8 @@ CREATE TABLE actor_sessions (
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `expires_at` TIMESTAMP,
   CONSTRAINT `register_approvalsPK` PRIMARY KEY (`id`));
-  
 DROP TABLE actor_sessions;
 
 INSERT INTO actor_roles(`id`,`role_name`) VALUES(1, 'super-admin'),(2, 'admin'), (3, 'customer');
 INSERT INTO actors(`id`,`username`, `password`, `role_id`, `is_verified`, `is_active`) VALUES (1, "super-admin", "7fbe1732f8b44c15b88f0c1e4fe94fcd0c60ccec", 1, true, true);
-
 SELECT * FROM customers WHERE CONCAT(first_name, ' ', last_name) LIKE "%lana%";

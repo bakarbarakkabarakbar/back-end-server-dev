@@ -84,8 +84,8 @@ func TestUseCase_GetActiveAdmins(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockRepo(&tt.fields.superAdminRepo)
 			uc := UseCase{
-				superAdminRepo: &tt.fields.superAdminRepo,
-				adminRepo:      &tt.fields.adminRepo,
+				sar: &tt.fields.superAdminRepo,
+				ar:  &tt.fields.adminRepo,
 			}
 			got, err := uc.GetActiveAdmins()
 			if (err != nil) != tt.wantErr {
@@ -169,8 +169,8 @@ func TestUseCase_GetApprovedAdmins(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockRepo(&tt.fields.superAdminRepo)
 			uc := UseCase{
-				superAdminRepo: &tt.fields.superAdminRepo,
-				adminRepo:      &tt.fields.adminRepo,
+				sar: &tt.fields.superAdminRepo,
+				ar:  &tt.fields.adminRepo,
 			}
 			got, err := uc.GetApprovedAdmins()
 			if (err != nil) != tt.wantErr {
@@ -254,8 +254,8 @@ func TestUseCase_GetPendingAdmins(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockRepo(&tt.fields.superAdminRepo)
 			uc := UseCase{
-				superAdminRepo: &tt.fields.superAdminRepo,
-				adminRepo:      &tt.fields.adminRepo,
+				sar: &tt.fields.superAdminRepo,
+				ar:  &tt.fields.adminRepo,
 			}
 			got, err := uc.GetPendingAdmins()
 			if (err != nil) != tt.wantErr {
@@ -334,8 +334,8 @@ func TestUseCase_GetRegisterAdminById(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockRepo(&tt.fields.superAdminRepo, tt.args.register)
 			uc := UseCase{
-				superAdminRepo: &tt.fields.superAdminRepo,
-				adminRepo:      &tt.fields.adminRepo,
+				sar: &tt.fields.superAdminRepo,
+				ar:  &tt.fields.adminRepo,
 			}
 			got, err := uc.GetRegisterAdminById(tt.args.register)
 			if (err != nil) != tt.wantErr {
@@ -419,8 +419,8 @@ func TestUseCase_GetRejectedAdmin(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockRepo(&tt.fields.superAdminRepo)
 			uc := UseCase{
-				superAdminRepo: &tt.fields.superAdminRepo,
-				adminRepo:      &tt.fields.adminRepo,
+				sar: &tt.fields.superAdminRepo,
+				ar:  &tt.fields.adminRepo,
 			}
 			got, err := uc.GetRejectedAdmin()
 			if (err != nil) != tt.wantErr {
@@ -512,8 +512,8 @@ func TestUseCase_GetVerifiedAdmins(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockRepo(&tt.fields.superAdminRepo)
 			uc := UseCase{
-				superAdminRepo: &tt.fields.superAdminRepo,
-				adminRepo:      &tt.fields.adminRepo,
+				sar: &tt.fields.superAdminRepo,
+				ar:  &tt.fields.adminRepo,
 			}
 			got, err := uc.GetVerifiedAdmins()
 			if (err != nil) != tt.wantErr {
@@ -596,8 +596,8 @@ func TestUseCase_ModifyRegisterAdminById(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockRepo(&tt.fields.superAdminRepo, tt.args.register)
 			uc := UseCase{
-				superAdminRepo: &tt.fields.superAdminRepo,
-				adminRepo:      &tt.fields.adminRepo,
+				sar: &tt.fields.superAdminRepo,
+				ar:  &tt.fields.adminRepo,
 			}
 			if err := uc.ModifyRegisterAdminById(tt.args.register); (err != nil) != tt.wantErr {
 				t.Errorf("ModifyRegisterAdminById() error = %v, wantErr %v", err, tt.wantErr)
@@ -677,8 +677,8 @@ func TestUseCase_ModifyStatusAdminById(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockRepo(&tt.fields.adminRepo, tt.args.actor)
 			uc := UseCase{
-				superAdminRepo: &tt.fields.superAdminRepo,
-				adminRepo:      &tt.fields.adminRepo,
+				sar: &tt.fields.superAdminRepo,
+				ar:  &tt.fields.adminRepo,
 			}
 			if err := uc.ModifyStatusAdminById(tt.args.actor); (err != nil) != tt.wantErr {
 				t.Errorf("ModifyStatusAdminById() error = %v, wantErr %v", err, tt.wantErr)
@@ -758,8 +758,8 @@ func TestUseCase_RemoveAdminById(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockRepo(&tt.fields.superAdminRepo, &tt.fields.adminRepo, tt.args.admin)
 			uc := UseCase{
-				superAdminRepo: &tt.fields.superAdminRepo,
-				adminRepo:      &tt.fields.adminRepo,
+				sar: &tt.fields.superAdminRepo,
+				ar:  &tt.fields.adminRepo,
 			}
 			got, err := uc.RemoveAdminById(tt.args.admin)
 			if (err != nil) != tt.wantErr {
@@ -840,8 +840,8 @@ func TestUseCase_RemoveRegisterAdminById(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockRepo(&tt.fields.superAdminRepo, tt.args.register)
 			uc := UseCase{
-				superAdminRepo: &tt.fields.superAdminRepo,
-				adminRepo:      &tt.fields.adminRepo,
+				sar: &tt.fields.superAdminRepo,
+				ar:  &tt.fields.adminRepo,
 			}
 			got, err := uc.RemoveRegisterAdminById(tt.args.register)
 			if (err != nil) != tt.wantErr {
