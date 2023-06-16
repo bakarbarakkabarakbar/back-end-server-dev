@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"back-end-server-dev/dto"
+	"user-management-backend/dto"
 )
 
 type RequestHandler struct {

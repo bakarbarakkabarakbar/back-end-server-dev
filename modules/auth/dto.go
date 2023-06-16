@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"back-end-server-dev/dto"
+	"user-management-backend/dto"
 )
 
 type CredentialParam struct {

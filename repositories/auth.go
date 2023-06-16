@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	"back-end-server-dev/entities"
 	"gorm.io/gorm"
+	"user-management-backend/entities"
 )
 
 type AuthRepo struct {

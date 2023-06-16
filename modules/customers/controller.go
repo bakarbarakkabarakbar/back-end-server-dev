@@ -1,7 +1,7 @@
 package customers
 
 import (
-	"back-end-server-dev/dto"
+	"user-management-backend/dto"
 )
 
 type Controller struct {

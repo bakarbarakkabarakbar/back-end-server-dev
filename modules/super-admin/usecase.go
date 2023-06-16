@@ -1,9 +1,9 @@
 package super_admin
 
 import (
-	"back-end-server-dev/entities"
-	"back-end-server-dev/repositories"
 	"errors"
+	"user-management-backend/entities"
+	"user-management-backend/repositories"
 )
 
 type UseCase struct {

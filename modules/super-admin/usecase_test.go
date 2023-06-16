@@ -1,11 +1,11 @@
 package super_admin
 
 import (
-	"back-end-server-dev/entities"
-	"back-end-server-dev/repositories/mocks"
 	"errors"
 	"reflect"
 	"testing"
+	"user-management-backend/entities"
+	"user-management-backend/repositories/mocks"
 )
 
 func TestUseCase_GetActiveAdmins(t *testing.T) {

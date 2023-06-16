@@ -1,17 +1,18 @@
 package main
 
 import (
-	"back-end-server-dev/modules/admin"
-	"back-end-server-dev/modules/auth"
-	"back-end-server-dev/modules/customers"
-	superAdmin "back-end-server-dev/modules/super-admin"
-	"back-end-server-dev/repositories"
-	"back-end-server-dev/utils/connection"
-	"back-end-server-dev/utils/orm"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"os"
+	"strconv"
+	"user-management-backend/modules/admin"
+	"user-management-backend/modules/auth"
+	"user-management-backend/modules/customers"
+	superAdmin "user-management-backend/modules/super-admin"
+	"user-management-backend/repositories"
+	"user-management-backend/utils/connection"
+	"user-management-backend/utils/orm"
 )
 
 func GetEnv(key string) string {
@@ -46,10 +47,34 @@ func main() {
 	var MYSQL_SERVER_PASSWORD = GetEnv("MYSQL_SERVER_PASSWORD")
 
 	var API_PORT = GetEnv("API_PORT")
+	var KAFKA_SERVER_HOST = GetEnv("KAFKA_SERVER_HOST")
+	var KAFKA_SERVER_PORT = GetEnv("KAFKA_SERVER_PORT")
+	var KAFKA_TOPIC = GetEnv("KAFKA_TOPIC")
+	var KAFKA_PARTITION int
+	KAFKA_PARTITION, err = strconv.Atoi(GetEnv("KAFKA_PARTITION"))
+	if err != nil {
+		panic(err)
+	}
 	//var SWAGGER_PORT = GetEnv("SWAGGER_PORT")
 	//var APP_PORT = GetEnv("APP_PORT")
 
-	//fmt.Println(MYSQL_SERVER_HOST, MYSQL_SERVER_PORT, MYSQL_SERVER_SCHEMA, MYSQL_SERVER_USER, MYSQL_SERVER_PASSWORD, APP_PORT, SWAGGER_PORT, API_PORT)
+	var kafkaBroker = connection.NewBrokerSegmentIo(
+		KAFKA_SERVER_HOST,
+		KAFKA_SERVER_PORT,
+		KAFKA_TOPIC,
+		KAFKA_PARTITION)
+
+	//err = kafkaBroker.WriteMessage("coba", "testing kafka")
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+	err = kafkaBroker.GetMessages()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	gin.SetMode(gin.ReleaseMode)
 	var engine = gin.New()
 	// golang-service-account:STRONG.password79@tcp(34.224.99.112:3306)/miniproject?charset=utf8mb4&parseTime=True&loc=UTC
@@ -62,12 +87,11 @@ func main() {
 	//fmt.Println(dsn)
 	//var dsn = "root:1234QWERasdf.@tcp(localhost:3306)/miniproject?charset=utf8mb4&parseTime=True&loc=UTC"
 	var dbConn = connection.NewDatabase(dsn)
-	var orm = orm.NewObjectRelationalMapping(dbConn)
+	var NewOrm = orm.NewObjectRelationalMapping(dbConn)
 	var gormInstances *gorm.DB
-	gormInstances, err = orm.Gorm()
+	gormInstances, err = NewOrm.Gorm()
 	if err != nil {
-		fmt.Println("Error init gorm", err)
-		return
+		panic(err)
 	}
 
 	var adminRepo = repositories.NewAdminRepo(gormInstances)
@@ -103,10 +127,10 @@ func main() {
 	//var route = router.NewRouter(gormInstances)
 	//route.Router(engine)
 
-	errRouter := engine.Run(fmt.Sprintf(":%s", API_PORT))
-	if errRouter != nil {
-		fmt.Println("error running server", errRouter)
-		return
+	err = engine.Run(fmt.Sprintf(":%s", API_PORT))
+	//err = engine.Run(":8081")
+	if err != nil {
+		panic(err)
 	}
 
 }

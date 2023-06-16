@@ -1,11 +1,11 @@
 package auth
 
 import (
-	"back-end-server-dev/dto"
 	"crypto/sha1"
 	"crypto/subtle"
 	"errors"
 	"fmt"
+	"user-management-backend/dto"
 )
 
 type Controller struct {

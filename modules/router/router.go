@@ -1,14 +1,14 @@
 package router
 
 import (
-	"back-end-server-dev/modules/admin"
-	"back-end-server-dev/modules/auth"
-	"back-end-server-dev/modules/customers"
-	superAdmin "back-end-server-dev/modules/super-admin"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"net/http"
+	"user-management-backend/modules/admin"
+	"user-management-backend/modules/auth"
+	"user-management-backend/modules/customers"
+	superAdmin "user-management-backend/modules/super-admin"
 )
 
 type Router struct {

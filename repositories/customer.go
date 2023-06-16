@@ -1,9 +1,9 @@
 package repositories
 
 import (
-	"back-end-server-dev/entities"
 	"fmt"
 	"gorm.io/gorm"
+	"user-management-backend/entities"
 )
 
 type CustomerRepo struct {

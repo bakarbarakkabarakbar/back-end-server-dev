@@ -1,6 +1,6 @@
 package super_admin
 
-import "back-end-server-dev/dto"
+import "user-management-backend/dto"
 
 type Controller struct {
 	uc UseCaseInterface

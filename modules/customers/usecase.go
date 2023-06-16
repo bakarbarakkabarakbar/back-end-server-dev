@@ -1,7 +1,7 @@
 package customers
 
 import (
-	"back-end-server-dev/repositories"
+	"user-management-backend/repositories"
 )
 
 type UseCase struct {

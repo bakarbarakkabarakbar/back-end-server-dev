@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	entities "back-end-server-dev/entities"
+	entities "user-management-backend/entities"
 
 	mock "github.com/stretchr/testify/mock"
 )

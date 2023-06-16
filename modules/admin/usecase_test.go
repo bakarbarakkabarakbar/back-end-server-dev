@@ -1,13 +1,13 @@
 package admin
 
 import (
-	"back-end-server-dev/entities"
-	"back-end-server-dev/repositories/mocks"
 	"crypto/sha1"
 	"errors"
 	"fmt"
 	"reflect"
 	"testing"
+	"user-management-backend/entities"
+	"user-management-backend/repositories/mocks"
 )
 
 func TestUseCase_CreateAdmin(t *testing.T) {

@@ -1,6 +1,6 @@
 package admin
 
-import "back-end-server-dev/dto"
+import "user-management-backend/dto"
 
 type CustomerParam struct {
 	Id        uint   `json:"id"`

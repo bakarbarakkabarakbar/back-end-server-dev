@@ -1,11 +1,11 @@
 package auth
 
 import (
-	"back-end-server-dev/dto"
-	"back-end-server-dev/function/jwt"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"user-management-backend/dto"
+	"user-management-backend/function/jwt"
 )
 
 type RequestHandler struct {

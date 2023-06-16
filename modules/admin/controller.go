@@ -1,9 +1,9 @@
 package admin
 
 import (
-	"back-end-server-dev/dto"
-	data_api "back-end-server-dev/function/data-api"
 	"errors"
+	"user-management-backend/dto"
+	data_api "user-management-backend/function/data-api"
 )
 
 type Controller struct {

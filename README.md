@@ -91,7 +91,26 @@ setx SWAGGER_PORT 8082
 ```shell
 setx APP_PORT 8080
 ```
+```shell
+setx KAFKA_SERVER_HOST localhost
+```
+```shell
+setx KAFKA_SERVER_PORT 9092
+```
+```shell
+setx KAFKA_TOPIC customer-mgmt
+```
+```shell
+setx KAFKA_PARTITION 0
+```
 
+In order to compile Go in Windows using kafka then we must set the Go ENV variables of
+CGO_ENABLED equal to true, kafka is build on C, then whne we flag this as true, it should
+be able to pick up module when compiling
+
+```shell
+go env -w CGO_ENABLED=1
+```
 
 ## Setup
 

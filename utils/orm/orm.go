@@ -1,10 +1,10 @@
 package orm
 
 import (
-	"back-end-server-dev/utils/connection"
 	"database/sql"
 	"gorm.io/gorm"
 	"log"
+	"user-management-backend/utils/connection"
 )
 
 type ObjectRelationalMapping struct {

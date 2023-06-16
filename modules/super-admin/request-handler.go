@@ -1,10 +1,10 @@
 package super_admin
 
 import (
-	"back-end-server-dev/dto"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+	"user-management-backend/dto"
 )
 
 type RequestHandler struct {

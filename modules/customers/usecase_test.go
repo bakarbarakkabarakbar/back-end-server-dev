@@ -1,12 +1,12 @@
 package customers
 
 import (
-	"back-end-server-dev/entities"
-	"back-end-server-dev/repositories/mocks"
-	"back-end-server-dev/utils/orm"
 	"errors"
 	"reflect"
 	"testing"
+	"user-management-backend/entities"
+	"user-management-backend/repositories/mocks"
+	"user-management-backend/utils/orm"
 )
 
 type Connection struct {

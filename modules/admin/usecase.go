@@ -1,11 +1,11 @@
 package admin
 
 import (
-	"back-end-server-dev/entities"
-	"back-end-server-dev/repositories"
 	"crypto/sha1"
 	"errors"
 	"fmt"
+	"user-management-backend/entities"
+	"user-management-backend/repositories"
 )
 
 type UseCase struct {
